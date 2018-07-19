@@ -37,6 +37,8 @@
 #' @importFrom rlang enquo
 #' @importFrom rlang quo
 #'
+#' @seealso grouped_lm
+#'
 #' @examples
 #'
 #' # in case of just one grouping variable
@@ -50,9 +52,9 @@
 
 # defining the function
 grouped_slr <- function(data,
-                       dep.vars,
-                       indep.vars,
-                       grouping.vars) {
+                        dep.vars,
+                        indep.vars,
+                        grouping.vars) {
   # ================== preparing dataframe ==================
   #
   # check how many variables were entered for criterion variables vector
@@ -86,10 +88,12 @@ grouped_slr <- function(data,
     }
 
   # getting the dataframe ready
-  df <- dplyr::select(.data = data,
-                      !!!grouping.vars,
-                      !!!dep.vars,
-                      !!!indep.vars) %>%
+  df <- dplyr::select(
+    .data = data,
+    !!!grouping.vars,
+    !!!dep.vars,
+    !!!indep.vars
+  ) %>%
     dplyr::group_by(.data = ., !!!grouping.vars) %>%
     tidyr::nest(data = .)
 
@@ -112,7 +116,7 @@ grouped_slr <- function(data,
       list.col %>% # running linear regression on each individual group with purrr
       purrr::map(
         .x = .,
-        .f = ~ stats::lm(
+        .f = ~stats::lm(
           formula = stats::as.formula(fx),
           data = (.),
           na.action = na.omit
@@ -120,7 +124,7 @@ grouped_slr <- function(data,
       ) %>% # tidying up the output with broom
       purrr::map_dfr(
         .x = .,
-        .f = ~ dplyr::bind_cols(
+        .f = ~dplyr::bind_cols(
           dplyr::filter(.data = broom::tidy(x = .), term == !!filter_name), # remove intercept terms
           broom::confint_tidy(x = .)[-c(1), ]
         ),
@@ -159,10 +163,14 @@ grouped_slr <- function(data,
   df_lm <- purrr::pmap(
     .l = list(
       list.col = list(df$data),
-      x_name = purrr::map(.x = indep.vars,
-                          .f = ~ rlang::quo_name(quo = .)),
-      y_name = purrr::map(.x = dep.vars,
-                          .f = ~ rlang::quo_name(quo = .))
+      x_name = purrr::map(
+        .x = indep.vars,
+        .f = ~rlang::quo_name(quo = .)
+      ),
+      y_name = purrr::map(
+        .x = dep.vars,
+        .f = ~rlang::quo_name(quo = .)
+      )
     ),
     .f = lm_listed
   ) %>%

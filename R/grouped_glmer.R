@@ -1,33 +1,27 @@
 #'
-#' @title Function to run generalized linear model (glm) across multiple
+#' @title Function to run generalized linear mixed-effects model (glmer) across multiple
 #'   grouping variables.
-#' @name grouped_glm
-#' @aliases grouped_glm
+#' @name grouped_glmer
+#' @aliases grouped_glmer
 #' @author Indrajeet Patil
-#' @return A tibble dataframe with tidy results from linear model.
+#' @return A tibble dataframe with tidy results from linear model or model
+#'   summaries.
 #'
 #' @param data Dataframe from which variables are to be taken.
 #' @param grouping.vars List of grouping variables.
 #' @param output A character describing what output is expected. Two possible
 #'   options: `"tidy"` (default), which will return the results, or `"glance"`,
 #'   which will return model summaries.
-#' @param quick Logical indicating if the only the term and estimate columns
-#'   should be returned. Often useful to avoid time consuming covariance and
-#'   standard error calculations. Defaults to `FALSE`.
-#' @param exponentiate Logical indicating whether or not to exponentiate the the
-#'   coefficient estimates. This is typical for logistic and multinomial
-#'   regressions, but a bad idea if there is no log or logit link. Defaults to
-#'   `FALSE`.
-#' @inheritParams stats::glm
+#' @inheritParams lme4::glmer
 #'
 #' @importFrom magrittr "%<>%"
 #' @importFrom broom tidy
-#' @importFrom broom confint_tidy
 #' @importFrom glue glue
 #' @importFrom purrr map
 #' @importFrom purrr map2_dfr
 #' @importFrom purrr pmap
-#' @importFrom stats glm
+#' @importFrom lme4 glmer
+#' @importFrom lme4 glmerControl
 #' @importFrom stats as.formula
 #' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
@@ -36,33 +30,57 @@
 #' @importFrom dplyr arrange
 #' @importFrom dplyr mutate
 #' @importFrom dplyr mutate_at
-#' @importFrom dplyr mutate_if
 #' @importFrom dplyr select
 #' @importFrom rlang quo_squash
 #' @importFrom rlang enquo
 #' @importFrom rlang quo
 #'
-#' @seealso grouped_lm, grouped_glmer
+#' @seealso grouped_lmer
 #'
 #' @examples
 #'
-#' groupedstats::grouped_glm(
-#'   data = ggstatsplot::Titanic_full,
-#'   formula = Survived ~ Sex,
-#'   grouping.vars = Class,
-#'   family = stats::binomial(link = "logit")
-#' )
+#' # commented because the examples take too much time
+#'
+#' # categorical outcome; binomial family
+#' # groupedstats::grouped_glmer(
+#' # formula = Survived ~ Age + (Age |
+#' #                             Class),
+#' # family = stats::binomial(link = "probit"),
+#' # data = groupedstats::Titanic_full,
+#' # grouping.vars = Sex
+#' # )
+#'
+#' # continuous outcome; gaussian family
+#' # library(gapminder)
+#'
+#' # groupedstats::grouped_glmer(data = gapminder,
+#' # formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
+#' # family = stats::gaussian(),
+#' # control = lme4::lmerControl(
+#' #  optimizer = "bobyqa",
+#' #   restart_edge = TRUE,
+#' #   boundary.tol = 1e-7,
+#' #   calc.derivs = FALSE,
+#' #   optCtrl = list(maxfun = 2e9)
+#' # ),
+#' # grouping.vars = year)
 #'
 #' @export
 #'
 
-grouped_glm <- function(data,
-                        grouping.vars,
-                        formula,
-                        family = stats::binomial(link = "logit"),
-                        quick = FALSE,
-                        exponentiate = FALSE,
-                        output = "tidy") {
+grouped_glmer <- function(data,
+                          grouping.vars,
+                          formula,
+                          family = stats::binomial(link = "probit"),
+                          control = lme4::glmerControl(
+                            optimizer = "bobyqa",
+                            boundary.tol = 1e-07,
+                            calc.derivs = FALSE,
+                            use.last.params = FALSE,
+                            optCtrl = list(maxfun = 2e9)
+                          ),
+                          output = "tidy") {
+
   # check how many variables were entered for grouping variable vector
   grouping.vars <-
     as.list(rlang::quo_squash(rlang::enquo(grouping.vars)))
@@ -74,9 +92,11 @@ grouped_glm <- function(data,
     }
 
   # getting the dataframe ready
-  df <- dplyr::select(.data = data,
-                      !!!grouping.vars,
-                      dplyr::everything()) %>%
+  df <- dplyr::select(
+    .data = data,
+    !!!grouping.vars,
+    dplyr::everything()
+  ) %>%
     dplyr::group_by(.data = ., !!!grouping.vars) %>%
     tidyr::nest(data = .) %>%
     dplyr::ungroup(x = .)
@@ -86,54 +106,51 @@ grouped_glm <- function(data,
   # custom function to run tidy operation on every element of list column
   fnlisted <-
     function(list.col,
-             formula,
-             family,
-             output,
-             quick,
-             exponentiate) {
+                 formula,
+                 output,
+                 family,
+                 control) {
       if (output == "tidy") {
-        # dataframe with results from glm
+        # dataframe with results from glmer
         results_df <-
           list.col %>% # tidying up the output with broom
           purrr::map_dfr(
             .x = .,
-            .f = ~ broom::tidy(
-              x = stats::glm(
+            .f = ~broom::tidy(
+              x = lme4::glmer(
                 formula = stats::as.formula(formula),
                 data = (.),
-                na.action = na.omit,
-                family = family
+                family = family,
+                control = control,
+                na.action = na.omit
               ),
-
               conf.int = TRUE,
               conf.level = 0.95,
-              quick = quick,
-              exponentiate = exponentiate
+              conf.method = "Wald",
+              effects = "fixed"
             ),
             .id = "..group"
           )
-      } else if (output == "glance") {
-        # dataframe with results from glm
+      } else {
+        # dataframe with results from lm
         results_df <-
           list.col %>% # tidying up the output with broom
           purrr::map_dfr(
             .x = .,
-            .f = ~ broom::glance(
-              x = stats::glm(
+            .f = ~broom::glance(
+              x = lme4::glmer(
                 formula = stats::as.formula(formula),
                 data = (.),
-                na.action = na.omit,
-                family = family
+                family = family,
+                control = control,
+                na.action = na.omit
               )
             ),
             .id = "..group"
           )
       }
-
-      # return the final dataframe
       return(results_df)
     }
-
 
   # ========================== using  custom function on entered dataframe ==================================
 
@@ -141,14 +158,14 @@ grouped_glm <- function(data,
   df %<>%
     tibble::rownames_to_column(df = ., var = "..group")
 
+  # running the custom function and cleaning the dataframe
   combined_df <- purrr::pmap(
     .l = list(
       list.col = list(df$data),
       formula = list(formula),
-      family = list(family),
       output = list(output),
-      quick = list(quick),
-      exponentiate = list(exponentiate)
+      family = list(family),
+      control = list(control)
     ),
     .f = fnlisted
   ) %>%
@@ -163,5 +180,6 @@ grouped_glm <- function(data,
       ggstatsplot:::signif_column(data = ., p = p.value)
   }
 
+  # return the final combined dataframe
   return(combined_df)
 }
