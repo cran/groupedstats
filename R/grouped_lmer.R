@@ -16,7 +16,7 @@
 #' @inheritParams sjstats::p_value.lmerMod
 #'
 #' @importFrom magrittr "%<>%"
-#' @importFrom broom tidy
+#' @importFrom broom.mixed tidy
 #' @importFrom glue glue
 #' @importFrom purrr map
 #' @importFrom purrr map2_dfr
@@ -36,29 +36,35 @@
 #' @importFrom rlang quo_squash
 #' @importFrom rlang enquo
 #' @importFrom rlang quo
-#'
+#' @importFrom broom.mixed glance
+#' @importFrom broom.mixed tidy
+#' @importFrom broom.mixed augment
 #'
 #' @examples
-#'
+#' 
 #' # loading libraries containing data
 #' library(ggplot2)
 #' library(gapminder)
-#'
+#' 
 #' # getting tidy output of results
-#' groupedstats::grouped_lmer(data = gapminder,
-#'              formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
-#'              grouping.vars = year,
-#'              output = "tidy")
-#'
+#' # let's use only 50% data to speed it up
+#' groupedstats::grouped_lmer(
+#'   data = dplyr::sample_frac(gapminder, size = 0.5),
+#'   formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
+#'   grouping.vars = year,
+#'   output = "tidy"
+#' )
+#' 
 #' # getting model summaries
-#' grouped_lmer(data = diamonds,
-#'              formula = scale(price) ~ scale(carat) + (carat | color),
-#'              REML = FALSE,
-#'              grouping.vars = c(cut, clarity),
-#'              output = "glance")
-#'
+#' # let's use only 50% data to speed it up
+#' grouped_lmer(
+#'   data = ggplot2::diamonds,
+#'   formula = scale(price) ~ scale(carat) + (carat | color),
+#'   REML = FALSE,
+#'   grouping.vars = c(cut, clarity),
+#'   output = "glance"
+#' )
 #' @export
-#'
 
 grouped_lmer <- function(data,
                          grouping.vars,
@@ -107,10 +113,10 @@ grouped_lmer <- function(data,
       if (output == "tidy") {
         # dataframe with results from lmer
         results_df <-
-          list.col %>% # tidying up the output with broom
+          list.col %>% # tidying up the output with broom.mixed
           purrr::map_dfr(
             .x = .,
-            .f = ~broom::tidy(
+            .f = ~broom.mixed::tidy(
               x = lme4::lmer(
                 formula = stats::as.formula(formula),
                 data = (.),
@@ -166,10 +172,10 @@ grouped_lmer <- function(data,
       } else {
         # dataframe with results from lm
         results_df <-
-          list.col %>% # tidying up the output with broom
+          list.col %>% # tidying up the output with broom.mixed
           purrr::map_dfr(
             .x = .,
-            .f = ~broom::glance(
+            .f = ~broom.mixed::glance(
               x = lme4::lmer(
                 formula = stats::as.formula(formula),
                 data = (.),
@@ -188,7 +194,7 @@ grouped_lmer <- function(data,
 
   # converting the original dataframe to have a grouping variable column
   df %<>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
 
   # running the custom function and cleaning the dataframe
   combined_df <- purrr::pmap(
@@ -210,7 +216,7 @@ grouped_lmer <- function(data,
   # add a column with significance labels if p-values are present
   if ("p.value" %in% names(combined_df)) {
     combined_df %<>%
-      ggstatsplot:::signif_column(data = ., p = p.value)
+      signif_column(data = ., p = p.value)
   }
 
   # return the final combined dataframe

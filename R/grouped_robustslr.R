@@ -25,13 +25,14 @@
 #' @importFrom tidyr nest
 #'
 #' @examples
-#'
+#' 
 #' # in case of just one grouping variable
-#' groupedstats::grouped_robustslr(data = iris,
-#' dep.vars = c(Sepal.Length, Petal.Length),
-#' indep.vars = c(Sepal.Width, Petal.Width),
-#' grouping.vars = Species)
-#'
+#' groupedstats::grouped_robustslr(
+#'   data = iris,
+#'   dep.vars = c(Sepal.Length, Petal.Length),
+#'   indep.vars = c(Sepal.Width, Petal.Width),
+#'   grouping.vars = Species
+#' )
 #' @export
 #'
 
@@ -132,7 +133,7 @@ grouped_robustslr <- function(data,
   # ========= using  custom function on entered dataframe =================
 
   df <- df %>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
   # running custom function for each element of the created list column
   df_lm <- purrr::pmap(
     .l = list(

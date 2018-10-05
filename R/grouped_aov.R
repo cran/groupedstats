@@ -39,17 +39,16 @@
 #' @importFrom rlang quo
 #'
 #' @examples
-#'
+#' 
 #' # uses dataset included in the groupedstats package
 #' library(groupedstats)
-#'
+#' 
 #' groupedstats::grouped_aov(
-#' formula = rating ~ belief * outcome * question,
-#' data = intent_morality,
-#' grouping.vars = item,
-#' effsize = "eta"
+#'   formula = rating ~ belief * outcome * question,
+#'   data = intent_morality,
+#'   grouping.vars = item,
+#'   effsize = "eta"
 #' )
-#'
 #' @export
 #'
 
@@ -151,7 +150,7 @@ grouped_aov <- function(data,
 
   # converting the original dataframe to have a grouping variable column
   df %<>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
 
   # running the custom function and cleaning the dataframe
   combined_df <- purrr::pmap(
@@ -172,12 +171,12 @@ grouped_aov <- function(data,
   # add a column with significance labels if p-values are present
   if ("p.value" %in% names(combined_df)) {
     combined_df %<>%
-      ggstatsplot:::signif_column(data = ., p = p.value)
+      signif_column(data = ., p = p.value)
   }
 
   if ("adj.p.value" %in% names(combined_df)) {
     combined_df %<>%
-      ggstatsplot:::signif_column(data = ., p = adj.p.value)
+      signif_column(data = ., p = adj.p.value)
 
     # display note about adjustment
     base::message(cat(

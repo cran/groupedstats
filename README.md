@@ -6,7 +6,7 @@
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/groupedstats)](https://CRAN.R-project.org/package=groupedstats)
 [![CRAN
 Checks](https://cranchecks.info/badges/summary/groupedstats)](https://cran.r-project.org/web/checks/check_results_groupedstats.html)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.0.2-orange.svg?style=flat-square)](commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.0.3-orange.svg?style=flat-square)](commits/master)
 [![Daily downloads
 badge](https://cranlogs.r-pkg.org/badges/last-day/groupedstats?color=blue)](https://CRAN.R-project.org/package=groupedstats)
 [![Weekly downloads
@@ -23,7 +23,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/IndrajeetPatil/groupe
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--07--19-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--10--04-yellowgreen.svg)](/commits/master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-red.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.3.0-6666ff.svg)](https://cran.r-project.org/)
@@ -53,20 +53,26 @@ few example cases-
     reaction time).
 4.  Combination of all of the above.
 
-This is first installment of the package that provides only the most
-basic statistical operations. The next releases will expand on the
-existing functionality.
+This package is still work in progress and it currently supports only
+the most basic statistical operations (from `stats` and `lme4` package).
+The next releases will expand on the existing functionality (e.g.,
+`ordinal`).
 
 ## Installation
 
-To get the latest, stable CRAN release (0.0.2):
+To get the latest, stable CRAN release (0.0.3):
 
 ``` r
 utils::install.packages(pkgs = "groupedstats") 
 ```
 
-You can get the development version from GitHub. If you are in hurry and
-want to reduce the time of installation, prefer-
+You can get the **development** version of the package from GitHub
+(`0.0.3.9000`). To see what new changes (and bug fixes) have been made
+to the package since the last release on `CRAN`, you can check the
+detailed log of changes here:
+<https://indrajeetpatil.github.io/groupedstats/news/index.html>
+
+If you are in hurry and want to reduce the time of installation, prefer-
 
 ``` r
 # needed package to download from GitHub repo
@@ -88,8 +94,11 @@ devtools::install_github(repo = "IndrajeetPatil/groupedstats", # package path on
 
 ## Help
 
-Documentation for any function can be accessed with the standard `help`
-command-
+There is a dedicated website to `groupedstats`, which is updated after
+every new commit: <https://indrajeetpatil.github.io/groupedstats/>.
+
+In `R`, documentation for any function can be accessed with the standard
+`help` command-
 
 ``` r
 ?grouped_aov
@@ -104,6 +113,30 @@ command-
 ?grouped_ttest
 ?grouped_wilcox
 ```
+
+Another handy tool to see arguments to any of the functions is `args`.
+For example-
+
+``` r
+args(name = groupedstats::grouped_ttest)
+#> function (data, dep.vars, indep.vars, grouping.vars, paired = FALSE, 
+#>     var.equal = FALSE) 
+#> NULL
+```
+
+In case you want to look at the function body for any of the functions,
+just type the name of the function without the paranetheses:
+
+``` r
+groupedstats::grouped_lm
+```
+
+If you are not familiar either with what the namespace `::` does or how
+to use pipe operator `%>%`, something this package and its documentation
+relies a lot on, you can check out these links-
+
+  - <http://r-pkgs.had.co.nz/namespace.html>
+  - <http://r4ds.had.co.nz/pipes.html>
 
 ## Usage
 
@@ -454,6 +487,11 @@ implemented in `grouped_lm`:
 
 ``` r
 library(groupedstats)
+#> 
+#> Attaching package: 'groupedstats'
+#> The following objects are masked from 'package:ggstatsplot':
+#> 
+#>     signif_column, specify_decimal_p
 
 groupedstats::grouped_lm(
   data = mtcars,
@@ -712,31 +750,31 @@ groupedstats::grouped_lmer(
 #> Computing p-values via Wald-statistics approximation (treating t as Wald z).
 #> Computing p-values via Wald-statistics approximation (treating t as Wald z).
 #> Computing p-values via Wald-statistics approximation (treating t as Wald z).
-#> # A tibble: 24 x 9
-#>     year term             estimate std.error t.value conf.low conf.high
-#>    <int> <chr>               <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
-#>  1  1952 (Intercept)         0.215     0.293   0.736   -0.358     0.789
-#>  2  1952 scale(gdpPercap)    0.930     0.302   3.07     0.337     1.52 
-#>  3  1957 (Intercept)         0.254     0.342   0.743   -0.416     0.923
-#>  4  1957 scale(gdpPercap)    0.815     0.282   2.89     0.262     1.37 
-#>  5  1962 (Intercept)         0.255     0.333   0.766   -0.397     0.908
-#>  6  1962 scale(gdpPercap)    0.591     0.210   2.82     0.180     1.00 
-#>  7  1967 (Intercept)         0.249     0.361   0.689   -0.459     0.956
-#>  8  1967 scale(gdpPercap)    0.387     0.120   3.24     0.153     0.622
-#>  9  1972 (Intercept)         0.276     0.366   0.753   -0.442     0.994
-#> 10  1972 scale(gdpPercap)    0.431     0.150   2.88     0.137     0.724
-#>    p.value significance
-#>      <dbl> <chr>       
-#>  1 0.462   ns          
-#>  2 0.00211 **          
-#>  3 0.457   ns          
-#>  4 0.00389 **          
-#>  5 0.444   ns          
-#>  6 0.00479 **          
-#>  7 0.491   ns          
-#>  8 0.00120 **          
-#>  9 0.451   ns          
-#> 10 0.00402 **          
+#> # A tibble: 24 x 10
+#>     year effect term             estimate std.error t.value conf.low
+#>    <int> <chr>  <chr>               <dbl>     <dbl>   <dbl>    <dbl>
+#>  1  1952 fixed  (Intercept)         0.215     0.293   0.736   -0.358
+#>  2  1952 fixed  scale(gdpPercap)    0.930     0.302   3.07     0.337
+#>  3  1957 fixed  (Intercept)         0.254     0.342   0.743   -0.416
+#>  4  1957 fixed  scale(gdpPercap)    0.815     0.282   2.89     0.262
+#>  5  1962 fixed  (Intercept)         0.255     0.333   0.766   -0.397
+#>  6  1962 fixed  scale(gdpPercap)    0.591     0.210   2.82     0.180
+#>  7  1967 fixed  (Intercept)         0.249     0.361   0.689   -0.459
+#>  8  1967 fixed  scale(gdpPercap)    0.387     0.120   3.24     0.153
+#>  9  1972 fixed  (Intercept)         0.276     0.366   0.753   -0.442
+#> 10  1972 fixed  scale(gdpPercap)    0.431     0.150   2.88     0.137
+#>    conf.high p.value significance
+#>        <dbl>   <dbl> <chr>       
+#>  1     0.789 0.462   ns          
+#>  2     1.52  0.00211 **          
+#>  3     0.923 0.457   ns          
+#>  4     1.37  0.00389 **          
+#>  5     0.908 0.444   ns          
+#>  6     1.00  0.00479 **          
+#>  7     0.956 0.491   ns          
+#>  8     0.622 0.00120 **          
+#>  9     0.994 0.451   ns          
+#> 10     0.724 0.00402 **          
 #> # ... with 14 more rows
 
 
@@ -799,13 +837,13 @@ groupedstats::grouped_glmer(
   grouping.vars = Sex,                                        # grouping variables (just one in this case)
   output = "tidy"
 )
-#> # A tibble: 4 x 9
-#>   Sex    term        estimate std.error statistic conf.low conf.high
-#>   <fct>  <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-#> 1 Male   (Intercept)   -0.888     0.162     -5.47   -1.21     -0.570
-#> 2 Male   AgeChild       4.90      4.03       1.22   -3.00     12.8  
-#> 3 Female (Intercept)    1.01      0.379      2.66    0.264     1.75 
-#> 4 Female AgeChild       1.47      0.595      2.48    0.307     2.64 
+#> # A tibble: 4 x 10
+#>   Sex    effect term        estimate std.error statistic conf.low conf.high
+#>   <fct>  <chr>  <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
+#> 1 Male   fixed  (Intercept)   -0.888     0.162     -5.47   -1.21     -0.570
+#> 2 Male   fixed  AgeChild       4.90      4.03       1.22   -3.00     12.8  
+#> 3 Female fixed  (Intercept)    1.01      0.379      2.66    0.264     1.75 
+#> 4 Female fixed  AgeChild       1.47      0.595      2.48    0.307     2.64 
 #>        p.value significance
 #>          <dbl> <chr>       
 #> 1 0.0000000453 ***         
@@ -1161,6 +1199,76 @@ evaluation`](https://adv-r.hadley.nz/evaluation.html) works:
   - If just one independent variable is provided for multiple dependent
     variables, it will be used as a common variable.
   - If you want to use a selection of variables, you need not use `c()`.
+
+## Extending with `purrr`
+
+`groupedstats` functions can be further extended with `purrr` package.
+For example, let’s say we want to run the same linear regression across
+multiple grouping variables but want to use different formulas-
+
+``` r
+results_df <- purrr::pmap_dfr(
+  .l = list(
+    data = list(gapminder::gapminder),
+    grouping.vars = alist(country),
+    formula = list(
+      lifeExp ~ year,           # formula 1
+      lifeExp ~ log(year),      # formula 2
+      log(lifeExp) ~ year,      # formula 3
+      log(lifeExp) ~ log(year)  # formula 4
+    ),
+    output = list("glance")
+  ),
+  .f = groupedstats::grouped_lm,
+  .id = "formula"
+)
+
+head(results_df)
+#> # A tibble: 6 x 14
+#>   formula country     r.squared adj.r.squared sigma statistic    df logLik
+#>   <chr>   <fct>           <dbl>         <dbl> <dbl>     <dbl> <int>  <dbl>
+#> 1 1       Afghanistan     0.948         0.942 1.22      181.      2 -18.3 
+#> 2 1       Albania         0.911         0.902 1.98      102.      2 -24.1 
+#> 3 1       Algeria         0.985         0.984 1.32      662.      2 -19.3 
+#> 4 1       Angola          0.888         0.877 1.41       79.1     2 -20.0 
+#> 5 1       Argentina       0.996         0.995 0.292    2246.      2  -1.17
+#> 6 1       Australia       0.980         0.978 0.621     481.      2 -10.2 
+#>     AIC   BIC deviance df.residual  p.value significance
+#>   <dbl> <dbl>    <dbl>       <int>    <dbl> <chr>       
+#> 1 42.7  44.1    15.0            10 9.84e- 8 ***         
+#> 2 54.3  55.8    39.3            10 1.46e- 6 ***         
+#> 3 44.6  46.0    17.5            10 1.81e-10 ***         
+#> 4 46.1  47.5    19.8            10 4.59e- 6 ***         
+#> 5  8.35  9.80    0.854          10 4.22e-13 ***         
+#> 6 26.4  27.9     3.85           10 8.67e-10 ***
+```
+
+## Current code coverage
+
+As the code stands right now, here is the code coverage for all primary
+functions involved:
+
+<https://codecov.io/gh/IndrajeetPatil/groupedstats/tree/master/R>
+
+<!--
+## Dependencies
+
+`groupedstats` relies on a number of other packages-
+
+<img src="man/figures/README-dependency_plot-1.png" width="100%" />
+-->
+
+## Contributing
+
+I’m happy to receive bug reports, suggestions, questions, and (most of
+all) contributions to fix problems and add features. I personally prefer
+using the Github issues system over trying to reach out to me in other
+ways (personal e-mail, Twitter, etc.). Pull requests for contributions
+are encouraged.
+
+Please note that this project is released with a [Contributor Code of
+Conduct](CONDUCT.md). By participating in this project you agree to
+abide by its terms.
 
 ## Suggestions
 

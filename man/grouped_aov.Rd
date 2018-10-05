@@ -5,8 +5,8 @@
 \title{Function to run analysis of variance (aov) across multiple grouping
 variables.}
 \usage{
-grouped_aov(data, grouping.vars, formula, effsize = "eta", output = "tidy",
-  nboot = 1000)
+grouped_aov(data, grouping.vars, formula, effsize = "eta",
+  output = "tidy", nboot = 1000)
 }
 \arguments{
 \item{data}{Dataframe from which variables are to be taken.}
@@ -25,7 +25,7 @@ method for \emph{post hoc} comparisons. The \code{"glance"} method to get model
 summary is currently not supported for this function.}
 
 \item{nboot}{Number of bootstrap samples for confidence intervals for partial
-eta-squared and omega-squared (Default: \code{1000}).}
+eta-squared and omega-squared (Default: \code{500}).}
 }
 \value{
 A tibble dataframe with tidy results from anova. No model summaries
@@ -41,12 +41,11 @@ variables.
 library(groupedstats)
 
 groupedstats::grouped_aov(
-formula = rating ~ belief * outcome * question,
-data = intent_morality,
-grouping.vars = item,
-effsize = "eta"
+  formula = rating ~ belief * outcome * question,
+  data = intent_morality,
+  grouping.vars = item,
+  effsize = "eta"
 )
-
 }
 \author{
 Indrajeet Patil

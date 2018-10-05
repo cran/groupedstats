@@ -29,16 +29,15 @@
 #' @importFrom tidyr nest
 #'
 #' @examples
-#'
+#' 
 #' groupedstats::grouped_ttest(
-#'  data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
-#'  dep.vars = c(carat, price, depth),
-#'  indep.vars = color,
-#'  grouping.vars = clarity,
-#'  paired = FALSE,
-#'  var.equal = FALSE
+#'   data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
+#'   dep.vars = c(carat, price, depth),
+#'   indep.vars = color,
+#'   grouping.vars = clarity,
+#'   paired = FALSE,
+#'   var.equal = FALSE
 #' )
-#'
 #' @export
 #'
 
@@ -146,7 +145,7 @@ grouped_ttest <- function(data,
   # ========= using  custom function on entered dataframe =================
 
   df <- df %>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
   # running custom function for each element of the created list column
   df_lm <- purrr::pmap(
     .l = list(

@@ -15,7 +15,7 @@
 #' @inheritParams lme4::glmer
 #'
 #' @importFrom magrittr "%<>%"
-#' @importFrom broom tidy
+#' @importFrom broom.mixed tidy
 #' @importFrom glue glue
 #' @importFrom purrr map
 #' @importFrom purrr map2_dfr
@@ -38,35 +38,37 @@
 #' @seealso grouped_lmer
 #'
 #' @examples
-#'
-#' # commented because the examples take too much time
-#'
+#' 
+#' # commented out because the examples are time-consuming and the R CMD CHECK
+#' # makes a NOTE (> 5s)
+#' 
 #' # categorical outcome; binomial family
-#' # groupedstats::grouped_glmer(
-#' # formula = Survived ~ Age + (Age |
-#' #                             Class),
-#' # family = stats::binomial(link = "probit"),
-#' # data = groupedstats::Titanic_full,
-#' # grouping.vars = Sex
-#' # )
-#'
+#' groupedstats::grouped_glmer(
+#'   formula = Survived ~ Age + (Age |
+#'     Class),
+#'   family = stats::binomial(link = "probit"),
+#'   data = dplyr::sample_frac(groupedstats::Titanic_full, size = 0.3),
+#'   grouping.vars = Sex
+#' )
+#' 
 #' # continuous outcome; gaussian family
-#' # library(gapminder)
-#'
-#' # groupedstats::grouped_glmer(data = gapminder,
-#' # formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
-#' # family = stats::gaussian(),
-#' # control = lme4::lmerControl(
-#' #  optimizer = "bobyqa",
-#' #   restart_edge = TRUE,
-#' #   boundary.tol = 1e-7,
-#' #   calc.derivs = FALSE,
-#' #   optCtrl = list(maxfun = 2e9)
-#' # ),
-#' # grouping.vars = year)
-#'
+#' library(gapminder)
+#' 
+#' groupedstats::grouped_glmer(
+#'   data = dplyr::sample_frac(gapminder, size = 0.3),
+#'   formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
+#'   family = stats::gaussian(),
+#'   control = lme4::lmerControl(
+#'     optimizer = "bobyqa",
+#'     restart_edge = TRUE,
+#'     boundary.tol = 1e-7,
+#'     calc.derivs = FALSE,
+#'     optCtrl = list(maxfun = 2e9)
+#'   ),
+#'   grouping.vars = year,
+#'   output = "tidy"
+#' )
 #' @export
-#'
 
 grouped_glmer <- function(data,
                           grouping.vars,
@@ -113,10 +115,10 @@ grouped_glmer <- function(data,
       if (output == "tidy") {
         # dataframe with results from glmer
         results_df <-
-          list.col %>% # tidying up the output with broom
+          list.col %>% # tidying up the output with broom.mixed
           purrr::map_dfr(
             .x = .,
-            .f = ~broom::tidy(
+            .f = ~broom.mixed::tidy(
               x = lme4::glmer(
                 formula = stats::as.formula(formula),
                 data = (.),
@@ -134,10 +136,10 @@ grouped_glmer <- function(data,
       } else {
         # dataframe with results from lm
         results_df <-
-          list.col %>% # tidying up the output with broom
+          list.col %>% # tidying up the output with broom.mixed
           purrr::map_dfr(
             .x = .,
-            .f = ~broom::glance(
+            .f = ~broom.mixed::glance(
               x = lme4::glmer(
                 formula = stats::as.formula(formula),
                 data = (.),
@@ -156,7 +158,7 @@ grouped_glmer <- function(data,
 
   # converting the original dataframe to have a grouping variable column
   df %<>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
 
   # running the custom function and cleaning the dataframe
   combined_df <- purrr::pmap(
@@ -177,7 +179,7 @@ grouped_glmer <- function(data,
   # add a column with significance labels if p-values are present
   if ("p.value" %in% names(combined_df)) {
     combined_df %<>%
-      ggstatsplot:::signif_column(data = ., p = p.value)
+      signif_column(data = ., p = p.value)
   }
 
   # return the final combined dataframe

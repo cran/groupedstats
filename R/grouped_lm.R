@@ -37,18 +37,18 @@
 #' @seealso grouped_slr
 #'
 #' @examples
-#'
+#' 
 #' # loading needed libraries
 #' library(ggplot2)
-#'
+#' 
 #' # getting tidy output of results
 #' grouped_lm(
 #'   data = mtcars,
 #'   grouping.vars = cyl,
-#'   formula = mpg ~ am*wt,
+#'   formula = mpg ~ am * wt,
 #'   output = "tidy"
 #' )
-#'
+#' 
 #' # getting model summaries
 #' # diamonds dataset from ggplot2
 #' grouped_lm(
@@ -57,7 +57,6 @@
 #'   formula = price ~ carat * clarity,
 #'   output = "glance"
 #' )
-#'
 #' @export
 #'
 
@@ -129,7 +128,7 @@ grouped_lm <- function(data,
 
   # converting the original dataframe to have a grouping variable column
   df %<>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
 
   combined_df <- purrr::pmap(
     .l = list(
@@ -147,7 +146,7 @@ grouped_lm <- function(data,
   # add a column with significance labels if p-values are present
   if ("p.value" %in% names(combined_df)) {
     combined_df %<>%
-      ggstatsplot:::signif_column(data = ., p = p.value)
+      signif_column(data = ., p = p.value)
   }
 
   return(combined_df)

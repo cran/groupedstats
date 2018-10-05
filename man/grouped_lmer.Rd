@@ -7,8 +7,8 @@ grouping variables.}
 \usage{
 grouped_lmer(data, grouping.vars, formula, REML = TRUE,
   control = lme4::lmerControl(optimizer = "bobyqa", restart_edge = TRUE,
-  boundary.tol = 1e-07, calc.derivs = FALSE, use.last.params = FALSE, optCtrl =
-  list(maxfun = 2e+09)), p.kr = FALSE, output = "tidy")
+  boundary.tol = 1e-07, calc.derivs = FALSE, use.last.params = FALSE,
+  optCtrl = list(maxfun = 2e+09)), p.kr = FALSE, output = "tidy")
 }
 \arguments{
 \item{data}{Dataframe from which variables are to be taken.}
@@ -63,18 +63,23 @@ library(ggplot2)
 library(gapminder)
 
 # getting tidy output of results
-groupedstats::grouped_lmer(data = gapminder,
-             formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
-             grouping.vars = year,
-             output = "tidy")
+# let's use only 50\% data to speed it up
+groupedstats::grouped_lmer(
+  data = dplyr::sample_frac(gapminder, size = 0.5),
+  formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
+  grouping.vars = year,
+  output = "tidy"
+)
 
 # getting model summaries
-grouped_lmer(data = diamonds,
-             formula = scale(price) ~ scale(carat) + (carat | color),
-             REML = FALSE,
-             grouping.vars = c(cut, clarity),
-             output = "glance")
-
+# let's use only 50\% data to speed it up
+grouped_lmer(
+  data = ggplot2::diamonds,
+  formula = scale(price) ~ scale(carat) + (carat | color),
+  REML = FALSE,
+  grouping.vars = c(cut, clarity),
+  output = "glance"
+)
 }
 \author{
 Indrajeet Patil

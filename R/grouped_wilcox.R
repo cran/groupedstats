@@ -29,16 +29,15 @@
 #' @importFrom tidyr nest
 #'
 #' @examples
-#'
+#' 
 #' # only with one grouping variable
 #' groupedstats::grouped_wilcox(
 #'   data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
-#'   dep.vars = depth:price,
+#'   dep.vars = depth:table,
 #'   indep.vars = color,
 #'   grouping.vars = clarity,
 #'   paired = FALSE
 #' )
-#'
 #' @export
 #'
 
@@ -148,7 +147,7 @@ grouped_wilcox <- function(data,
   # ========= using  custom function on entered dataframe =================
 
   df <- df %>%
-    tibble::rownames_to_column(df = ., var = "..group")
+    tibble::rownames_to_column(., var = "..group")
 
   # running custom function for each element of the created list column
   df_lm <- purrr::pmap(
