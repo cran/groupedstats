@@ -1,4 +1,3 @@
-#'
 #' @title Function to run robust simple linear regression (slr) on multiple variables across
 #'   multiple grouping variables.
 #' @name grouped_robustslr
@@ -34,7 +33,6 @@
 #'   grouping.vars = Species
 #' )
 #' @export
-#'
 
 # defining the function
 grouped_robustslr <- function(data,
@@ -102,14 +100,14 @@ grouped_robustslr <- function(data,
       list.col %>% # running linear regression on each individual group with purrr
       purrr::map(
         .x = .,
-        .f = ~robust::lmRob(
+        .f = ~ robust::lmRob(
           formula = stats::as.formula(fx),
           data = (.)
         )
       ) %>% # tidying up the output with broom
       purrr::map_dfr(
         .x = .,
-        .f = ~broom::tidy(x = .),
+        .f = ~ broom::tidy(x = .),
         .id = "..group"
       ) %>% # remove intercept terms
       dplyr::filter(.data = ., term == !!filter_name) %>% # add formula as a character
@@ -140,11 +138,11 @@ grouped_robustslr <- function(data,
       list.col = list(df$data),
       x_name = purrr::map(
         .x = indep.vars,
-        .f = ~rlang::quo_name(quo = .)
+        .f = ~ rlang::quo_name(quo = .)
       ),
       y_name = purrr::map(
         .x = dep.vars,
-        .f = ~rlang::quo_name(quo = .)
+        .f = ~ rlang::quo_name(quo = .)
       )
     ),
     .f = lm_listed

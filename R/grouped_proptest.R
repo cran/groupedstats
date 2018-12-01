@@ -1,4 +1,3 @@
-#'
 #' @title Function to run proportion test on grouped data.
 #' @name grouped_proptest
 #' @author Indrajeet Patil
@@ -23,7 +22,6 @@
 #'   measure = am
 #' )
 #' @export
-#'
 
 grouped_proptest <- function(data,
                              grouping.vars,
@@ -61,7 +59,7 @@ grouped_proptest <- function(data,
       percentage = data %>%
         purrr::map(
           .x = .,
-          .f = ~dplyr::group_by(.data = ., measure) %>%
+          .f = ~ dplyr::group_by(.data = ., measure) %>%
             dplyr::summarize(.data = ., counts = length(measure)) %>%
             dplyr::mutate(
               .data = .,
@@ -81,7 +79,7 @@ grouped_proptest <- function(data,
       .data = .,
       chi_sq = data %>% purrr::map(
         .x = .,
-        .f = ~stats::chisq.test(x = base::table(.$measure))
+        .f = ~ stats::chisq.test(x = base::table(.$measure))
       )
     ) %>%
     dplyr::mutate(

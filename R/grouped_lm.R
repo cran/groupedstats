@@ -1,4 +1,3 @@
-#'
 #' @title Function to run linear model (lm) across multiple grouping variables.
 #' @name grouped_lm
 #' @aliases grouped_lm
@@ -58,7 +57,6 @@
 #'   output = "glance"
 #' )
 #' @export
-#'
 
 grouped_lm <- function(data,
                        grouping.vars,
@@ -94,7 +92,7 @@ grouped_lm <- function(data,
         list.col %>% # tidying up the output with broom
         purrr::map_dfr(
           .x = .,
-          .f = ~broom::tidy(
+          .f = ~ broom::tidy(
             x = stats::lm(
               formula = stats::as.formula(formula),
               data = (.),
@@ -112,7 +110,7 @@ grouped_lm <- function(data,
         list.col %>% # tidying up the output with broom
         purrr::map_dfr(
           .x = .,
-          .f = ~broom::glance(x = stats::lm(
+          .f = ~ broom::glance(x = stats::lm(
             formula = stats::as.formula(formula),
             data = (.),
             na.action = na.omit

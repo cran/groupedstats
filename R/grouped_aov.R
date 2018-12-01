@@ -1,4 +1,3 @@
-#'
 #' @title Function to run analysis of variance (aov) across multiple grouping
 #'   variables.
 #' @name grouped_aov
@@ -50,7 +49,6 @@
 #'   effsize = "eta"
 #' )
 #' @export
-#'
 
 grouped_aov <- function(data,
                         grouping.vars,
@@ -105,7 +103,7 @@ grouped_aov <- function(data,
           list.col %>%
           purrr::map_dfr(
             .x = .,
-            .f = ~lm_effsize_ci(
+            .f = ~ lm_effsize_ci(
               object = stats::aov(
                 formula = stats::as.formula(formula),
                 data = (.),
@@ -128,7 +126,7 @@ grouped_aov <- function(data,
           list.col %>%
           purrr::map_dfr(
             .x = .,
-            .f = ~broom::tidy(
+            .f = ~ broom::tidy(
               x = stats::TukeyHSD(
                 x = stats::aov(
                   formula = stats::as.formula(formula),

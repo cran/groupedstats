@@ -1,4 +1,3 @@
-#'
 #' @title Function to get descriptive statistics for multiple variables for all
 #'   grouping variable levels
 #' @name grouped_summary
@@ -54,7 +53,6 @@
 #'   measures.type = "numeric"
 #' )
 #' @export
-#'
 
 # function body
 grouped_summary <- function(data,
@@ -62,10 +60,12 @@ grouped_summary <- function(data,
                             measures = NULL,
                             measures.type = "numeric",
                             topcount.long = FALSE) {
-  # ================================================== data ===========================================================
+  # ============================== data ========================================
+
   # check how many variables were entered for this grouping variable
   grouping.vars <-
     base::as.list(x = rlang::quo_squash(quo = rlang::enquo(arg = grouping.vars)))
+
   # based on number of arguments, select grouping.vars in cases like `c(cyl)`,
   # the first list element after `quo_squash` will be `c` which we don't need,
   # but if we pass just `cyl`, there is no `c`, this will take care of that
@@ -178,7 +178,7 @@ grouped_summary <- function(data,
         .data = data,
         !!rlang::enquo(measures)
       ),
-      .f = ~purrr::is_bare_numeric(.)
+      .f = ~ purrr::is_bare_numeric(.)
     ) == FALSE)
     # factor
     # convert factor into characters
@@ -195,7 +195,7 @@ grouped_summary <- function(data,
     # count the number of character type variables
     factor_count <- sum(purrr::map_lgl(
       .x = df_char,
-      .f = ~purrr::is_bare_character(.)
+      .f = ~ purrr::is_bare_character(.)
     ) == FALSE)
 
     # conditionally stopping the function
@@ -250,7 +250,7 @@ grouped_summary <- function(data,
       summary = data %>% # 'data' variable is automatically created by tidyr::nest function
         purrr::map(
           .x = .,
-          .f = ~skimr::skim_to_wide(.)
+          .f = ~ skimr::skim_to_wide(.)
         )
     )
 
@@ -265,7 +265,7 @@ grouped_summary <- function(data,
         summary = summary %>%
           purrr::map(
             .x = .,
-            .f = ~dplyr::select(.data = ., dplyr::everything())
+            .f = ~ dplyr::select(.data = ., dplyr::everything())
           )
       ) %>% # remove the histograms since they are not that helpful
       tidyr::unnest(data = .) %>% # unnesting the data
@@ -276,7 +276,7 @@ grouped_summary <- function(data,
       count_long_format_fn <- function(top_counts) {
         purrr::map_dfr(
           .x = base::strsplit(x = top_counts, split = ","),
-          .f = ~tibble::as_data_frame(x = .) %>%
+          .f = ~ tibble::as_data_frame(x = .) %>%
             dplyr::mutate_all(.tbl = ., .funs = base::trimws) %>%
             tidyr::separate(
               data = .,
@@ -297,7 +297,7 @@ grouped_summary <- function(data,
           long.counts = data %>%
             purrr::map(
               .x = .,
-              .f = ~count_long_format_fn(top_counts = .$top_counts)
+              .f = ~ count_long_format_fn(top_counts = .$top_counts)
             )
         ) %>%
         dplyr::select(.data = ., -data) %>%
@@ -331,7 +331,7 @@ grouped_summary <- function(data,
       dplyr::mutate_at(
         .tbl = .,
         .vars = dplyr::vars(missing, complete, n, mean, sd, p0, p25, p50, p75, p100),
-        .funs = ~as.numeric(as.character(.)) # change summary variables to numeric
+        .funs = ~ as.numeric(as.character(.)) # change summary variables to numeric
       ) %>% # renaming variables to more common terminology
       dplyr::rename(
         .data = .,

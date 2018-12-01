@@ -6,7 +6,7 @@
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/groupedstats)](https://CRAN.R-project.org/package=groupedstats)
 [![CRAN
 Checks](https://cranchecks.info/badges/summary/groupedstats)](https://cran.r-project.org/web/checks/check_results_groupedstats.html)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.0.3-orange.svg?style=flat-square)](commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.0.4.9000-orange.svg?style=flat-square)](commits/master)
 [![Daily downloads
 badge](https://cranlogs.r-pkg.org/badges/last-day/groupedstats?color=blue)](https://CRAN.R-project.org/package=groupedstats)
 [![Weekly downloads
@@ -23,14 +23,14 @@ Status](https://ci.appveyor.com/api/projects/status/github/IndrajeetPatil/groupe
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--10--04-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--12--01-yellowgreen.svg)](/commits/master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-red.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![minimal R
-version](https://img.shields.io/badge/R%3E%3D-3.3.0-6666ff.svg)](https://cran.r-project.org/)
+version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/IndrajeetPatil/groupedstats/master.svg)](https://codecov.io/github/IndrajeetPatil/groupedstats?branch=master)
 
-## Overview
+# Overview
 
 `groupedstats` package provides a collection of functions to run
 statistical operations on multiple variables across multiple grouping
@@ -58,16 +58,16 @@ the most basic statistical operations (from `stats` and `lme4` package).
 The next releases will expand on the existing functionality (e.g.,
 `ordinal`).
 
-## Installation
+# Installation
 
-To get the latest, stable CRAN release (0.0.3):
+To get the latest, stable CRAN release (0.0.4):
 
 ``` r
 utils::install.packages(pkgs = "groupedstats") 
 ```
 
 You can get the **development** version of the package from GitHub
-(`0.0.3.9000`). To see what new changes (and bug fixes) have been made
+(`0.0.4.9000`). To see what new changes (and bug fixes) have been made
 to the package since the last release on `CRAN`, you can check the
 detailed log of changes here:
 <https://indrajeetpatil.github.io/groupedstats/news/index.html>
@@ -92,7 +92,7 @@ devtools::install_github(repo = "IndrajeetPatil/groupedstats", # package path on
 )
 ```
 
-## Help
+# Help
 
 There is a dedicated website to `groupedstats`, which is updated after
 every new commit: <https://indrajeetpatil.github.io/groupedstats/>.
@@ -125,7 +125,7 @@ args(name = groupedstats::grouped_ttest)
 ```
 
 In case you want to look at the function body for any of the functions,
-just type the name of the function without the paranetheses:
+just type the name of the function without the parentheses:
 
 ``` r
 groupedstats::grouped_lm
@@ -138,7 +138,7 @@ relies a lot on, you can check out these links-
   - <http://r-pkgs.had.co.nz/namespace.html>
   - <http://r4ds.had.co.nz/pipes.html>
 
-## Usage
+# Usage
 
 ## `grouped_summary`
 
@@ -188,7 +188,7 @@ groupedstats::grouped_summary(data = datasets::iris,
 ```
 
 This function can be used to get summary of either numeric **or** factor
-varibles, but **not** both. This is by design. If no `measures` are
+variables, but **not** both. This is by design. If no `measures` are
 specified, the function will compute summary for all variables of the
 specified type (`numeric` or `factor`).
 
@@ -238,6 +238,17 @@ to use an additional argument provided for this function:
 ``` r
 library(ggplot2)
 library(magrittr)
+#> 
+#> Attaching package: 'magrittr'
+#> The following object is masked from 'package:rlang':
+#> 
+#>     set_names
+#> The following object is masked from 'package:purrr':
+#> 
+#>     set_names
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     extract
 library(ggstatsplot)
 
 options(tibble.width = Inf)            # show me all columns
@@ -326,7 +337,7 @@ between different pairs of variables across multiple levels of grouping
 variable(s). For example, we can use the `gapminder` dataset to study
 two relationships of interest for **each country** across years:
 
-1.  life expectency and GDP (per capita)
+1.  life expectancy and GDP (per capita)
 2.  population GDP (per capita) Thus, in this case we have two
     regression models and one grouping variable with 142 levels
     (countries)
@@ -370,12 +381,12 @@ groupedstats::grouped_slr(data = gapminder::gapminder,
 ```
 
 Notice the order in which the dependent and independent variables are
-entered; there are two regression models being run here: `lifeExp ~
-gdpPercap` and `pop ~ gdpPercap` If this order is incorrect, the result
-will also be incorrect. So it is always a good idea to check the
-*formula* column to see if you have run the correct linear models. Also,
-note that the estimates are already standardized, i.e. estimates are
-standardized regression coefficients (betas, i.e.).
+entered; there are two separate regression models being run here:
+`lifeExp ~ gdpPercap` and `pop ~ gdpPercap` If this order is incorrect,
+the result will also be incorrect. So it is always a good idea to check
+the *formula* column to see if you have run the correct linear models.
+Also, note that the estimates are already standardized, i.e. estimates
+are standardized regression coefficients (betas, i.e.).
 
 The prior example was with just one grouping variable. This can be done
 with multiple grouping variables as well. For example, with the
@@ -386,14 +397,6 @@ cut-
 ``` r
 library(ggplot2)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 options(tibble.width = Inf)            # show me all columns
 
 groupedstats::grouped_slr(data = ggplot2::diamonds,
@@ -489,9 +492,9 @@ implemented in `grouped_lm`:
 library(groupedstats)
 #> 
 #> Attaching package: 'groupedstats'
-#> The following objects are masked from 'package:ggstatsplot':
+#> The following object is masked from 'package:ggstatsplot':
 #> 
-#>     signif_column, specify_decimal_p
+#>     set_cwd
 
 groupedstats::grouped_lm(
   data = mtcars,
@@ -664,8 +667,7 @@ tests conducted.
 ## `grouped_glm`
 
 The option to run generalized linear model (`stats::glm`) across
-different levels of the grouping variable is also implemented
-similarily-
+different levels of the grouping variable is also implemented similarly-
 
 ``` r
 groupedstats::grouped_glm(
@@ -892,7 +894,7 @@ groupedstats::grouped_proptest(data = datasets::mtcars,
 ## `grouped_ttest`
 
 This function can help you carry out t-tests, paired or independent, on
-multiple variables across multiple groups. Deomostrating how to use this
+multiple variables across multiple groups. Demonstrating how to use this
 function is going to first require getting the `iris` dataset into long
 format. Let’s say we want to investigate if `Sepal` part of the flower
 has greater measurement (length or width) than `Petal` part of the
@@ -1193,72 +1195,69 @@ groupedstats::grouped_wilcox(
 ```
 
 In these examples, two things are worth noting that generalize to
-**all** functions in this package and stem from how [`tidy
-evaluation`](https://adv-r.hadley.nz/evaluation.html) works:
+**all** functions in this package and stem from how tidy evaluation
+(<https://adv-r.hadley.nz/evaluation.html>) works:
 
   - If just one independent variable is provided for multiple dependent
     variables, it will be used as a common variable.
   - If you want to use a selection of variables, you need not use `c()`.
 
-## Extending with `purrr`
+# Extending with `purrr`
 
 `groupedstats` functions can be further extended with `purrr` package.
 For example, let’s say we want to run the same linear regression across
 multiple grouping variables but want to use different formulas-
 
 ``` r
+set.seed(123)
+library(groupedstats)
+
 results_df <- purrr::pmap_dfr(
   .l = list(
-    data = list(gapminder::gapminder),
-    grouping.vars = alist(country),
+    data = list(groupedstats::movies_long),
+    grouping.vars = alist(c(mpaa, genre)), # note it's `alist` and not `list`
     formula = list(
-      lifeExp ~ year,           # formula 1
-      lifeExp ~ log(year),      # formula 2
-      log(lifeExp) ~ year,      # formula 3
-      log(lifeExp) ~ log(year)  # formula 4
+      rating ~ budget,           # model 1
+      rating ~ log(budget),      # model 2
+      log(rating) ~ budget,      # model 3
+      log(rating) ~ log(budget)  # model 4
     ),
-    output = list("glance")
+    output = list("glance")      # return model diagnostics
   ),
-  .f = groupedstats::grouped_lm,
-  .id = "formula"
-)
+  .f = groupedstats::grouped_lm, # regression model
+  .id = "model"
+) %>%  # for each combination of mpaa rating and movie genre
+  dplyr::group_by(.data = ., mpaa, genre) %>% # arrange by best to worst fits
+  dplyr::arrange(.data = ., dplyr::desc(adj.r.squared))
 
 head(results_df)
-#> # A tibble: 6 x 14
-#>   formula country     r.squared adj.r.squared sigma statistic    df logLik
-#>   <chr>   <fct>           <dbl>         <dbl> <dbl>     <dbl> <int>  <dbl>
-#> 1 1       Afghanistan     0.948         0.942 1.22      181.      2 -18.3 
-#> 2 1       Albania         0.911         0.902 1.98      102.      2 -24.1 
-#> 3 1       Algeria         0.985         0.984 1.32      662.      2 -19.3 
-#> 4 1       Angola          0.888         0.877 1.41       79.1     2 -20.0 
-#> 5 1       Argentina       0.996         0.995 0.292    2246.      2  -1.17
-#> 6 1       Australia       0.980         0.978 0.621     481.      2 -10.2 
-#>     AIC   BIC deviance df.residual  p.value significance
-#>   <dbl> <dbl>    <dbl>       <int>    <dbl> <chr>       
-#> 1 42.7  44.1    15.0            10 9.84e- 8 ***         
-#> 2 54.3  55.8    39.3            10 1.46e- 6 ***         
-#> 3 44.6  46.0    17.5            10 1.81e-10 ***         
-#> 4 46.1  47.5    19.8            10 4.59e- 6 ***         
-#> 5  8.35  9.80    0.854          10 4.22e-13 ***         
-#> 6 26.4  27.9     3.85           10 8.67e-10 ***
+#> # A tibble: 6 x 15
+#> # Groups:   mpaa, genre [3]
+#>   model mpaa  genre       r.squared adj.r.squared  sigma statistic    df
+#>   <chr> <fct> <fct>           <dbl>         <dbl>  <dbl>     <dbl> <int>
+#> 1 2     PG-13 Animation       0.474         0.369 0.824       4.51     2
+#> 2 4     PG-13 Animation       0.447         0.337 0.138       4.05     2
+#> 3 3     PG    Documentary     0.468         0.202 0.0532      1.76     2
+#> 4 1     PG    Documentary     0.449         0.174 0.386       1.63     2
+#> 5 4     R     Action          0.142         0.138 0.254      34.6      2
+#> 6 2     R     Action          0.129         0.125 1.31       30.9      2
+#>     logLik     AIC     BIC  deviance df.residual      p.value significance
+#>      <dbl>   <dbl>   <dbl>     <dbl>       <int>        <dbl> <chr>       
+#> 1   -7.40    20.8    20.6    3.39              5 0.0870       ns          
+#> 2    5.09    -4.18   -4.35   0.0957            5 0.100        ns          
+#> 3    7.45    -8.90  -10.7    0.00565           2 0.316        ns          
+#> 4   -0.479    6.96    5.12   0.298             2 0.330        ns          
+#> 5   -9.39    24.8    34.8   13.5             209 0.0000000162 ***         
+#> 6 -356.     718.    728.   361.              209 0.0000000825 ***
 ```
 
-## Current code coverage
+# Current code coverage
 
 As the code stands right now, here is the code coverage for all primary
 functions involved:
-
 <https://codecov.io/gh/IndrajeetPatil/groupedstats/tree/master/R>
 
-<!--
-## Dependencies
-
-`groupedstats` relies on a number of other packages-
-
-<img src="man/figures/README-dependency_plot-1.png" width="100%" />
--->
-
-## Contributing
+# Contributing
 
 I’m happy to receive bug reports, suggestions, questions, and (most of
 all) contributions to fix problems and add features. I personally prefer
