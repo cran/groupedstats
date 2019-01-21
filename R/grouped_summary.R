@@ -19,8 +19,7 @@
 #' @param topcount.long If `measures.type = factor`, you can get the top counts
 #'   in long format for plotting purposes. (Default: `topcount.long = FALSE`).
 #'
-#' @importFrom magrittr "%<>%"
-#' @importFrom skimr skim_to_wide
+#' @importFrom skimr skim
 #' @importFrom tibble as_data_frame
 #' @importFrom purrr is_bare_numeric
 #' @importFrom purrr is_bare_character
@@ -36,7 +35,7 @@
 #' @importFrom stats qt
 #'
 #' @examples
-#' 
+#'
 #' # another possibility
 #' groupedstats::grouped_summary(
 #'   data = datasets::iris,
@@ -44,7 +43,7 @@
 #'   measures = Sepal.Length:Petal.Width,
 #'   measures.type = "numeric"
 #' )
-#' 
+#'
 #' # if you have just one variable per argument, you need not use `c()`
 #' groupedstats::grouped_summary(
 #'   data = datasets::ToothGrowth,
@@ -235,29 +234,42 @@ grouped_summary <- function(data,
       }
     }
   }
-  # options(show.error.messages = TRUE)
-  # ================================================== summary ===========================================================
+
+  # ============================ summary ==================================
   #
   # creating a nested dataframe
   df_nest <- df %>%
     dplyr::group_by(.data = ., !!!grouping.vars) %>%
-    tidyr::nest(data = .)
+    tidyr::nest(data = .) %>%
+    dplyr::filter(.data = ., !purrr::map_lgl(.x = data, .f = is.null)) %>%
+    dplyr::ungroup(x = .)
 
-  # computing summary
-  df_summary <- df_nest %>%
-    dplyr::mutate(
-      .data = .,
-      summary = data %>% # 'data' variable is automatically created by tidyr::nest function
-        purrr::map(
-          .x = .,
-          .f = ~ skimr::skim_to_wide(.)
-        )
-    )
+  # computing summary (depends on the version of skimr)
+  if (utils::packageVersion("skimr") != "2.0") {
+    df_summary <- df_nest %>%
+      dplyr::mutate(
+        .data = .,
+        summary = data %>%
+          purrr::map(.x = .,
+                     .f = ~ skimr::skim_to_wide(.))
+      )
+  } else {
+    df_summary <- df_nest %>%
+      dplyr::mutate(
+        .data = .,
+        summary = data %>%
+          purrr::map(
+            .x = .,
+            .f = ~ tibble::as_tibble(skimr::skim(.))
+          )
+      )
+  }
 
-  # ================================================== factor ===========================================================
-  #
+  # =============================== factor ============================
+
   if (measures.type == "factor") {
-    # tidying up the skimr output by removing unnecessary information and renaming certain columns
+    # tidying up the skimr output by removing unnecessary information and
+    # renaming certain columns
     df_summary %<>%
       dplyr::select(.data = ., -data) %>% # removing the redudant data column
       dplyr::mutate(
@@ -270,7 +282,8 @@ grouped_summary <- function(data,
       ) %>% # remove the histograms since they are not that helpful
       tidyr::unnest(data = .) %>% # unnesting the data
       tibble::as_data_frame(x = .) # converting to tibble dataframe
-    # =========================================== factor long format conversion ==========================================
+
+    # ===================== factor long format conversion ====================
     if (isTRUE(topcount.long)) {
       # custom function used to convert counts into long format
       count_long_format_fn <- function(top_counts) {
@@ -308,7 +321,7 @@ grouped_summary <- function(data,
         dplyr::full_join(x = df_summary, y = df_summary_long)
     }
   }
-  # ================================================== numeric ===========================================================
+  # ================================ numeric ==============================
   #
   if (measures.type == "numeric") {
     # tidying up the skimr output by removing unnecessary information and renaming certain columns
@@ -342,8 +355,16 @@ grouped_summary <- function(data,
       dplyr::mutate(
         .data = .,
         std.error = sd / base::sqrt(n),
-        mean.low.conf = mean - stats::qt(p = 1 - (0.05 / 2), df = n - 1, lower.tail = TRUE) * std.error,
-        mean.high.conf = mean + stats::qt(p = 1 - (0.05 / 2), df = n - 1, lower.tail = TRUE) * std.error
+        mean.low.conf = mean - stats::qt(
+          p = 1 - (0.05 / 2),
+          df = n - 1,
+          lower.tail = TRUE
+        ) * std.error,
+        mean.high.conf = mean + stats::qt(
+          p = 1 - (0.05 / 2),
+          df = n - 1,
+          lower.tail = TRUE
+        ) * std.error
       )
   }
 
