@@ -22,7 +22,6 @@
 #' @importFrom lme4 glmer
 #' @importFrom lme4 glmerControl
 #' @importFrom stats as.formula
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #' @importFrom dplyr select
 #' @importFrom dplyr group_by
@@ -37,10 +36,10 @@
 #' @seealso grouped_lmer
 #'
 #' @examples
-#' 
+#'
 #' # commented out because the examples are time-consuming and the R CMD CHECK
 #' # makes a NOTE (> 5s)
-#' 
+#'
 #' # categorical outcome; binomial family
 #' groupedstats::grouped_glmer(
 #'   formula = Survived ~ Age + (Age |
@@ -49,10 +48,10 @@
 #'   data = dplyr::sample_frac(groupedstats::Titanic_full, size = 0.3),
 #'   grouping.vars = Sex
 #' )
-#' 
+#'
 #' # continuous outcome; gaussian family
 #' library(gapminder)
-#' 
+#'
 #' groupedstats::grouped_glmer(
 #'   data = dplyr::sample_frac(gapminder, size = 0.3),
 #'   formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),

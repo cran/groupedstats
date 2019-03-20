@@ -25,17 +25,16 @@
 #' @importFrom broom tidy
 #' @importFrom crayon red
 #' @importFrom crayon blue
-#' @importFrom rlang enquo
+#' @importFrom rlang !! !!! enquo
 #' @importFrom stats lm
-#' @importFrom tibble as_data_frame
 #'
 #' @family helper_stats
 #'
 #' @examples
-#' 
+#'
 #' # vector as input
 #' groupedstats::signif_column(p = c(0.05, 0.1, 1, 0.00001, 0.001, 0.01))
-#' 
+#'
 #' # dataframe as input
 #' # preparing a newdataframe
 #' df <- cbind.data.frame(
@@ -43,9 +42,9 @@
 #'   y = 1,
 #'   p.value = c(0.1, 0.5, 0.00001, 0.05, 0.01)
 #' )
-#' 
+#'
 #' groupedstats::signif_column(data = df, p = p.value)
-#' 
+#'
 #' # numbers entered as characters are also tolerated
 #' groupedstats::signif_column(p = c("1", "0.1", "0.0002", "0.03", "0.65"))
 #' @export
@@ -57,19 +56,11 @@ signif_column <- function(data = NULL, p, messages = FALSE) {
   if (!is.null(data)) {
 
     # storing variable name to be assigned later
-    p_lab <- colnames(dplyr::select(
-      .data = data,
-      !!rlang::enquo(p)
-    ))
+    p_lab <- colnames(dplyr::select(.data = data, !!rlang::enquo(p)))
 
     # preparing dataframe
     df <-
-      dplyr::select(
-        .data = data,
-        # column corresponding to p-values
-        p = !!rlang::enquo(p),
-        dplyr::everything()
-      )
+      dplyr::select(.data = data, p = !!rlang::enquo(p), dplyr::everything())
   } else {
 
     # if only vector is provided
@@ -101,19 +92,13 @@ signif_column <- function(data = NULL, p, messages = FALSE) {
     dplyr::mutate(
       .data = .,
       significance = dplyr::case_when(
-        # first condition
         p >= 0.050 ~ "ns",
-        # second condition
-        p < 0.050 &
-          p >= 0.010 ~ "*",
-        # third condition
-        p < 0.010 &
-          p >= 0.001 ~ "**",
-        # fourth condition
+        p < 0.050 & p >= 0.010 ~ "*",
+        p < 0.010 & p >= 0.001 ~ "**",
         p < 0.001 ~ "***"
       )
     ) %>%
-    tibble::as_data_frame(x = .) # convert to tibble dataframe
+    tibble::as_tibble(x = .) # convert to tibble dataframe
 
   # change back from the generic p-value to the original name that was provided
   # by the user for the p-value

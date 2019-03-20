@@ -24,7 +24,6 @@
 #' @importFrom lme4 lmerControl
 #' @importFrom sjstats p_value
 #' @importFrom stats as.formula
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #' @importFrom dplyr select
 #' @importFrom dplyr group_by
@@ -40,11 +39,11 @@
 #' @importFrom broom.mixed augment
 #'
 #' @examples
-#' 
+#'
 #' # loading libraries containing data
 #' library(ggplot2)
 #' library(gapminder)
-#' 
+#'
 #' # getting tidy output of results
 #' # let's use only 50% data to speed it up
 #' groupedstats::grouped_lmer(
@@ -53,7 +52,7 @@
 #'   grouping.vars = year,
 #'   output = "tidy"
 #' )
-#' 
+#'
 #' # getting model summaries
 #' # let's use only 50% data to speed it up
 #' grouped_lmer(

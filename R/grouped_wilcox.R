@@ -24,11 +24,10 @@
 #' @importFrom purrr pmap
 #' @importFrom stats wilcox.test
 #' @importFrom stats as.formula
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #'
 #' @examples
-#' 
+#'
 #' # only with one grouping variable
 #' groupedstats::grouped_wilcox(
 #'   data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
@@ -138,7 +137,7 @@ grouped_wilcox <- function(data,
           p.value,
           alternative
         ) %>% # convert to a tibble dataframe
-        tibble::as_data_frame(x = .)
+        tibble::as_tibble(x = .)
 
       # return the dataframe
       return(results_df)

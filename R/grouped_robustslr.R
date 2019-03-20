@@ -18,11 +18,10 @@
 #' @importFrom purrr map map_lgl map2_dfr pmap
 #' @importFrom robust lmRob
 #' @importFrom stats as.formula
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #'
 #' @examples
-#' 
+#'
 #' # in case of just one grouping variable
 #' groupedstats::grouped_robustslr(
 #'   data = iris,
@@ -124,7 +123,7 @@ grouped_robustslr <- function(data,
         std.error,
         p.value
       ) %>% # convert to a tibble dataframe
-      tibble::as_data_frame(x = .)
+      tibble::as_tibble(x = .)
 
     # return the dataframe
     return(results_df)
@@ -136,7 +135,7 @@ grouped_robustslr <- function(data,
     tibble::rownames_to_column(., var = "..group")
 
   # running custom function for each element of the created list column
-  df_lm <- purrr::pmap(
+  combined_df <- purrr::pmap(
     .l = list(
       list.col = list(df$data),
       x_name = purrr::map(
@@ -159,5 +158,5 @@ grouped_robustslr <- function(data,
   # ============================== output ==================================
 
   # return the final dataframe with results
-  return(df_lm)
+  return(combined_df)
 }

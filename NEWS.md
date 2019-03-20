@@ -1,3 +1,12 @@
+# groupedstats 0.0.6
+ 
+NEW FUNCTIONS
+
+  - New re-exported functions: `grouped_tidy`, `grouped_glance`,
+    `grouped_augment`. These provide the most general form of `grouped_`
+    versions of generic functions from `broom` package family. They can be used
+    to carry out grouped analysis for any function that has a `data` argument.
+
 # groupedstats 0.0.5
 
   - Maintenance release: Makes `groupedstats` compatible with `skimr 2.0` and

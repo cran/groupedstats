@@ -20,7 +20,6 @@
 #'   in long format for plotting purposes. (Default: `topcount.long = FALSE`).
 #'
 #' @importFrom skimr skim
-#' @importFrom tibble as_data_frame
 #' @importFrom purrr is_bare_numeric
 #' @importFrom purrr is_bare_character
 #' @importFrom purrr map_lgl
@@ -33,6 +32,7 @@
 #' @importFrom crayon blue
 #' @importFrom crayon red
 #' @importFrom stats qt
+#' @importFrom utils packageVersion
 #'
 #' @examples
 #'
@@ -82,7 +82,7 @@ grouped_summary <- function(data,
     # addition to* grouping variables
     if (measures.type == "numeric") {
       # check if there are any columns of factor type
-      numeric_cols <- length(tibble::as_data_frame(
+      numeric_cols <- length(tibble::as_tibble(
         x = purrr::keep(
           .x = dplyr::select(
             .data = data,
@@ -122,13 +122,14 @@ grouped_summary <- function(data,
       }
     } else if (measures.type == "factor") {
       # check if there are any columns of factor type
-      factor_cols <- length(tibble::as_data_frame(x = purrr::keep(
+      factor_cols <- length(tibble::as_tibble(x = purrr::keep(
         .x = dplyr::select(
           .data = data,
           -c(!!!grouping.vars)
         ),
         .p = base::is.factor
       )))
+
       # create a dataframe only if this is the case
       if (factor_cols > 0) {
         # of character/factor type
@@ -167,11 +168,12 @@ grouped_summary <- function(data,
       !!rlang::enquo(measures)
     )
   }
-  # ================================================== checks ===========================================================
+
+  # =================================== checks ===============================
+
   # when measures have been specified
   if (!base::missing(measures)) {
-    # check the class of variables (all have to be of uniform type)
-    # numeric
+    # check the class of variables (all have to be of uniform type) numeric
     numeric_count <- sum(purrr::map_lgl(
       .x = dplyr::select(
         .data = data,
@@ -179,6 +181,7 @@ grouped_summary <- function(data,
       ),
       .f = ~ purrr::is_bare_numeric(.)
     ) == FALSE)
+
     # factor
     # convert factor into characters
     df_char <- dplyr::select(
@@ -245,13 +248,15 @@ grouped_summary <- function(data,
     dplyr::ungroup(x = .)
 
   # computing summary (depends on the version of skimr)
-  if (utils::packageVersion("skimr") != "2.0") {
+  if (utils::packageVersion("skimr") < "2.0") {
     df_summary <- df_nest %>%
       dplyr::mutate(
         .data = .,
         summary = data %>%
-          purrr::map(.x = .,
-                     .f = ~ skimr::skim_to_wide(.))
+          purrr::map(
+            .x = .,
+            .f = ~ skimr::skim_to_wide(.)
+          )
       )
   } else {
     df_summary <- df_nest %>%
@@ -281,15 +286,16 @@ grouped_summary <- function(data,
           )
       ) %>% # remove the histograms since they are not that helpful
       tidyr::unnest(data = .) %>% # unnesting the data
-      tibble::as_data_frame(x = .) # converting to tibble dataframe
+      tibble::as_tibble(x = .) # converting to tibble dataframe
 
     # ===================== factor long format conversion ====================
+
     if (isTRUE(topcount.long)) {
       # custom function used to convert counts into long format
       count_long_format_fn <- function(top_counts) {
         purrr::map_dfr(
           .x = base::strsplit(x = top_counts, split = ","),
-          .f = ~ tibble::as_data_frame(x = .) %>%
+          .f = ~ tibble::as_tibble(x = .) %>%
             dplyr::mutate_all(.tbl = ., .funs = base::trimws) %>%
             tidyr::separate(
               data = .,
@@ -300,7 +306,7 @@ grouped_summary <- function(data,
             )
         )
       }
-      #
+
       # converting to long format using the custom function
       df_summary_long <- df_summary %>%
         dplyr::group_by(.data = ., !!!grouping.vars) %>%
@@ -337,7 +343,7 @@ grouped_summary <- function(data,
           )
       ) %>% # remove the histograms since they are not that helpful
       tidyr::unnest(data = .) %>% # unnesting the data
-      tibble::as_data_frame(x = .) # converting to tibble dataframe
+      tibble::as_tibble(x = .) # converting to tibble dataframe
 
     # changing class of summary variables if these are numeric variables
     df_summary %<>%

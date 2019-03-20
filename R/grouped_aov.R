@@ -25,7 +25,6 @@
 #' @importFrom stats aov
 #' @importFrom stats as.formula
 #' @importFrom stats TukeyHSD
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #' @importFrom dplyr select
 #' @importFrom dplyr group_by
@@ -38,10 +37,10 @@
 #' @importFrom rlang quo
 #'
 #' @examples
-#' 
+#'
 #' # uses dataset included in the groupedstats package
 #' library(groupedstats)
-#' 
+#'
 #' groupedstats::grouped_aov(
 #'   formula = rating ~ belief * outcome * question,
 #'   data = intent_morality,

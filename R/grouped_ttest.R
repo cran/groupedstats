@@ -24,11 +24,10 @@
 #' @importFrom purrr pmap
 #' @importFrom stats t.test
 #' @importFrom stats as.formula
-#' @importFrom tibble as_data_frame
 #' @importFrom tidyr nest
 #'
 #' @examples
-#' 
+#'
 #' groupedstats::grouped_ttest(
 #'   data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
 #'   dep.vars = c(carat, price, depth),
@@ -92,7 +91,8 @@ grouped_ttest <- function(data,
 
   # ============== custom function ================
 
-  # custom function to run linear regression for every element of a list for two variables
+  # custom function to run linear regression for every element of a list for two
+  # variables
   lm_listed <- function(list.col,
                           x_name,
                           y_name,
@@ -122,7 +122,8 @@ grouped_ttest <- function(data,
         .f = ~ broom::tidy(x = .),
         .id = "..group"
       ) %>% # add formula as a character
-      dplyr::mutate(.data = ., formula = as.character(fx)) %>% # rearrange the dataframe
+      dplyr::mutate(.data = ., formula = as.character(fx)) %>%
+      # rearrange the dataframe
       dplyr::select(
         .data = .,
         `..group`,
@@ -136,7 +137,7 @@ grouped_ttest <- function(data,
         p.value,
         alternative
       ) %>% # convert to a tibble dataframe
-      tibble::as_data_frame(x = .)
+      tibble::as_tibble(x = .)
 
     # return the dataframe
     return(results_df)
