@@ -1,23 +1,23 @@
-#' @title Function to run t-test on multiple variables across multiple grouping
-#'   variables.
+#' @title Function to run *t*-test on multiple variables across multiple
+#'   grouping variables.
 #' @name grouped_ttest
 #' @author Indrajeet Patil
-#' @return A tibble dataframe with tidy results from t-test analyses.
+#' @return A tibble dataframe with tidy results from *t*-test analyses.
 #'
 #' @param data Dataframe from which variables are to be taken.
-#' @param dep.vars List dependent variables for a t-test (`y` in `y ~ x`).
-#' @param indep.vars List independent variables for a t-test (`x` in `y ~ x`).
+#' @param dep.vars List dependent variables for a *t*-test (`y` in `y ~ x`).
+#' @param indep.vars List independent variables for a *t*-test (`x` in `y ~ x`).
 #' @param grouping.vars List of grouping variables.
-#' @param paired A logical indicating whether you want a paired t-test (Default:
-#'   `paired = FALSE`; independent t-test, i.e.).
+#' @param paired A logical indicating whether you want a paired *t*-test (Default:
+#'   `paired = FALSE`; independent *t*-test, i.e.).
 #' @param var.equal A logical variable indicating whether to treat the two
 #'   variances as being equal. If `TRUE`, then the pooled variance is used to
 #'   estimate the variance otherwise the Welch (or Satterthwaite) approximation
 #'   to the degrees of freedom is used (Default: `var.equal = FALSE`; Welch's
-#'   t-test, i.e.).
+#'   *t*-test, i.e.).
 #'
 #' @importFrom glue glue
-#' @importFrom purrr map map2_dfr pmap
+#' @importFrom purrr map map2_dfr pmap map_lgl
 #' @importFrom stats wilcox.test as.formula t.test
 #' @importFrom tidyr nest
 #' @importFrom rlang !! enquos enquo quo quo_squash
@@ -25,6 +25,8 @@
 #' @importFrom dplyr left_join right_join
 #'
 #' @examples
+#' # for reproducibility
+#' set.seed(123)
 #'
 #' groupedstats::grouped_ttest(
 #'   data = dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J"),
@@ -139,8 +141,8 @@ grouped_ttest <- function(data,
 
   # using  custom function on entered dataframe ----------------------------
 
-  df <- df %>%
-    tibble::rownames_to_column(., var = "..group")
+  df %<>% tibble::rownames_to_column(., var = "..group")
+
   # running custom function for each element of the created list column
   df_lm <- purrr::pmap(
     .l = list(

@@ -1,3 +1,17 @@
+# groupedstats 0.0.8
+
+BREAKING CHANGES
+
+  - `signif_column` no longer works with vectors and expects dataframe (`data`
+    argument can no longer be `NULL`, i.e.). This is to remain consistent with
+    rest of the functions in this package.
+
+MAJOR CHANGES
+
+  - Flags in `README` that this package is retired and future releases will
+    focus only on maintenance and bug fixes. 
+  - Code refactoring of all utility functions.
+
 # groupedstats 0.0.7
 
   - Maintenance release. The only change is that the package relies on

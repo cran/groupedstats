@@ -6,7 +6,7 @@
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/groupedstats)](https://CRAN.R-project.org/package=groupedstats)
 [![CRAN
 Checks](https://cranchecks.info/badges/summary/groupedstats)](https://cran.r-project.org/web/checks/check_results_groupedstats.html)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.0.7.9000-orange.svg?style=flat-square)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.0.8.9000-orange.svg?style=flat-square)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
 [![Daily downloads
 badge](https://cranlogs.r-pkg.org/badges/last-day/groupedstats?color=blue)](https://CRAN.R-project.org/package=groupedstats)
 [![Weekly downloads
@@ -25,8 +25,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/IndrajeetPatil/groupe
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--06--04-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-red.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--08--06-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
+[![lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![Coverage
@@ -58,21 +58,39 @@ few example cases-
     reaction time).
 4.  Combination of all of the above.
 
-This package is still work in progress and it currently supports only
-the most basic statistical operations (from `stats` and `lme4` package).
-The next releases will expand on the existing functionality (e.g.,
-`ordinal`).
+# Retirement
+
+This package is no longer under active development and no new
+functionality will be added. The package will continue to be available
+on `CRAN` and all releases will primarily be focused on maintenance and
+bug fixes. This is for two reasons-
+
+1.  There is are more general versions of these functions introduced in
+    `broomExtra` package: `grouped_tidy`, `grouped_augment`,
+    `grouped_glance`.
+
+For more, see:
+<https://indrajeetpatil.github.io/broomExtra/reference/index.html#section-grouped-variants-of-generics>
+
+2.  `dplyr 0.8.1` introduced `group_map()`, `group_modify()` and
+    `group_walk()` functions that can be used to iterate on grouped
+    dataframes. So if you want to do `grouped_` operations, I would
+    highly recommend using these functions over `groupedstats` functions
+    since the former are much more general, efficient, and faster than
+    the latter.
+
+For more, see: <https://dplyr.tidyverse.org/reference/group_map.html>
 
 # Installation
 
-To get the latest, stable `CRAN` release (0.0.7):
+To get the latest, stable `CRAN` release (0.0.8):
 
 ``` r
 utils::install.packages(pkgs = "groupedstats")
 ```
 
 You can get the **development** version of the package from `GitHub`
-(`0.0.7.9000`). To see what new changes (and bug fixes) have been made
+(`0.0.8.9000`). To see what new changes (and bug fixes) have been made
 to the package since the last release on `CRAN`, you can check the
 detailed log of changes here:
 <https://indrajeetpatil.github.io/groupedstats/news/index.html>
@@ -113,31 +131,7 @@ utils::citation(package = "groupedstats")
 There is a dedicated website to `groupedstats`, which is updated after
 every new commit: <https://indrajeetpatil.github.io/groupedstats/>.
 
-In `R`, documentation for any function can be accessed with the standard
-`help` command-
-
-``` r
-# general
-?grouped_tidy
-?grouped_glance
-?grouped_augment
-
-# specific
-?grouped_aov
-?grouped_lm
-?grouped_lmer
-?grouped_glm
-?grouped_glmer
-?grouped_summary
-?grouped_slr
-?grouped_robustslr
-?grouped_proptest
-?grouped_ttest
-?grouped_wilcox
-```
-
-Another handy tool to see arguments to any of the functions is `args`.
-For example-
+To see arguments for any of the functions, use `args`. For example-
 
 ``` r
 args(groupedstats::grouped_ttest)
@@ -153,7 +147,7 @@ In case you want to look at the function body for any of the functions,
 just type the name of the function without the parentheses:
 
 ``` r
-groupedstats::grouped_lm
+groupedstats::grouped_summary
 ```
 
 If you are not familiar either with what the namespace `::` does or how
@@ -174,6 +168,8 @@ variables and multiple variables for which summary statistics are to be
 computed-
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(datasets)
 options(tibble.width = Inf) # show me all columns
 
@@ -222,6 +218,8 @@ specified type (`numeric` or `factor`).
 If you want summary of variables of `factor` type-
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(ggplot2)
 options(tibble.width = Inf) # show me all columns
 
@@ -232,30 +230,30 @@ groupedstats::grouped_summary(
   measures.type = "factor"
 )
 #> # A tibble: 40 x 10
-#>    cut       clarity type   variable missing complete n     n_unique
-#>    <ord>     <ord>   <chr>  <chr>    <chr>   <chr>    <chr> <chr>   
-#>  1 Ideal     SI2     factor color    0       2598     2598  7       
-#>  2 Premium   SI1     factor color    0       3575     3575  7       
-#>  3 Good      VS1     factor color    0       648      648   7       
-#>  4 Premium   VS2     factor color    0       3357     3357  7       
-#>  5 Good      SI2     factor color    0       1081     1081  7       
-#>  6 Very Good VVS2    factor color    0       1235     1235  7       
-#>  7 Very Good VVS1    factor color    0       789      789   7       
-#>  8 Very Good SI1     factor color    0       3240     3240  7       
-#>  9 Fair      VS2     factor color    0       261      261   7       
-#> 10 Very Good VS1     factor color    0       1775     1775  7       
+#>    cut   clarity type   variable missing complete n     n_unique
+#>    <ord> <ord>   <chr>  <chr>    <chr>   <chr>    <chr> <chr>   
+#>  1 Fair  I1      factor color    0       210      210   7       
+#>  2 Fair  SI2     factor color    0       466      466   7       
+#>  3 Fair  SI1     factor color    0       408      408   7       
+#>  4 Fair  VS2     factor color    0       261      261   7       
+#>  5 Fair  VS1     factor color    0       170      170   7       
+#>  6 Fair  VVS2    factor color    0       69       69    7       
+#>  7 Fair  VVS1    factor color    0       17       17    7       
+#>  8 Fair  IF      factor color    0       9        9     3       
+#>  9 Good  I1      factor color    0       96       96    7       
+#> 10 Good  SI2     factor color    0       1081     1081  7       
 #>    top_counts                     ordered
 #>    <chr>                          <chr>  
-#>  1 G: 486, E: 469, F: 453, H: 450 TRUE   
-#>  2 H: 655, E: 614, F: 608, G: 566 TRUE   
-#>  3 G: 152, F: 132, I: 103, E: 89  TRUE   
-#>  4 G: 721, E: 629, F: 619, H: 532 TRUE   
-#>  5 D: 223, E: 202, F: 201, G: 163 TRUE   
-#>  6 G: 302, E: 298, F: 249, H: 145 TRUE   
-#>  7 G: 190, F: 174, E: 170, H: 115 TRUE   
-#>  8 E: 626, F: 559, H: 547, D: 494 TRUE   
-#>  9 F: 53, G: 45, E: 42, H: 41     TRUE   
-#> 10 G: 432, E: 293, F: 293, H: 257 TRUE   
+#>  1 G: 53, H: 52, F: 35, I: 34     TRUE   
+#>  2 H: 91, F: 89, G: 80, E: 78     TRUE   
+#>  3 F: 83, H: 75, G: 69, E: 65     TRUE   
+#>  4 F: 53, G: 45, E: 42, H: 41     TRUE   
+#>  5 G: 45, F: 33, H: 32, I: 25     TRUE   
+#>  6 G: 17, E: 13, H: 11, F: 10     TRUE   
+#>  7 F: 5, D: 3, E: 3, G: 3         TRUE   
+#>  8 F: 4, D: 3, G: 2, E: 0         TRUE   
+#>  9 E: 23, F: 19, G: 19, H: 14     TRUE   
+#> 10 D: 223, E: 202, F: 201, G: 163 TRUE   
 #> # ... with 30 more rows
 ```
 
@@ -265,6 +263,8 @@ this column is of `character` type and in wide format. The solution is
 to use an additional argument provided for this function:
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(ggplot2)
 library(magrittr)
 library(ggstatsplot)
@@ -295,9 +295,8 @@ groupedstats::grouped_summary(
   ggplot2::geom_bar(stat = "identity") +
   ggplot2::labs(x = "color", y = "count") +
   ggplot2::facet_grid(facets = ~cut) + # for each level of the factor level
-  ggstatsplot::theme_mprl() +
+  ggstatsplot::theme_ggstatsplot() +
   ggplot2::theme(legend.position = "none")
-#> Joining, by = "cut"
 ```
 
 <img src="man/figures/README-grouped_summary3-1.png" width="100%" />
@@ -308,6 +307,8 @@ other pipelines, e.g., preparing a plot of `mean` and `sd` values in
 `ggplot2`).
 
 ``` r
+# for reproducibility
+set.seed(123)
 options(tibble.width = Inf) # show me all columns
 
 groupedstats::grouped_summary(
@@ -315,42 +316,42 @@ groupedstats::grouped_summary(
   grouping.vars = c(cut, clarity)
 )
 #> # A tibble: 280 x 17
-#>    cut     clarity type    variable missing complete     n    mean      sd
-#>    <ord>   <ord>   <chr>   <chr>      <dbl>    <dbl> <dbl>   <dbl>   <dbl>
-#>  1 Ideal   SI2     integer price          0     2598  2598 4756.   4252.  
-#>  2 Ideal   SI2     numeric carat          0     2598  2598    1.01    0.51
-#>  3 Ideal   SI2     numeric depth          0     2598  2598   61.7     0.82
-#>  4 Ideal   SI2     numeric table          0     2598  2598   56.1     1.3 
-#>  5 Ideal   SI2     numeric x              0     2598  2598    6.26    1.07
-#>  6 Ideal   SI2     numeric y              0     2598  2598    6.27    1.05
-#>  7 Ideal   SI2     numeric z              0     2598  2598    3.87    0.66
-#>  8 Premium SI1     integer price          0     3575  3575 4455.   4071.  
-#>  9 Premium SI1     numeric carat          0     3575  3575    0.91    0.48
-#> 10 Premium SI1     numeric depth          0     3575  3575   61.3     1.17
+#>    cut   clarity type    variable missing complete     n    mean      sd
+#>    <ord> <ord>   <chr>   <chr>      <dbl>    <dbl> <dbl>   <dbl>   <dbl>
+#>  1 Fair  I1      integer price          0      210   210 3704.   3099.  
+#>  2 Fair  I1      numeric carat          0      210   210    1.36    0.75
+#>  3 Fair  I1      numeric depth          0      210   210   65.7     3.1 
+#>  4 Fair  I1      numeric table          0      210   210   58.1     2.87
+#>  5 Fair  I1      numeric x              0      210   210    6.72    1.11
+#>  6 Fair  I1      numeric y              0      210   210    6.62    1.13
+#>  7 Fair  I1      numeric z              0      210   210    4.39    0.76
+#>  8 Fair  SI2     integer price          0      466   466 5174.   3928.  
+#>  9 Fair  SI2     numeric carat          0      466   466    1.2     0.5 
+#> 10 Fair  SI2     numeric depth          0      466   466   64.4     3.16
 #>       min     p25  median     p75      max std.error mean.low.conf
 #>     <dbl>   <dbl>   <dbl>   <dbl>    <dbl>     <dbl>         <dbl>
-#>  1 326    1443    4060.   5402.   18804     83.4          4592.   
-#>  2   0.23    0.62    1       1.2      3.01   0.0100          0.990
-#>  3  58.3    61.2    61.8    62.3     65.5    0.0161         61.7  
-#>  4  52      55      56      57       62      0.0255         56.1  
-#>  5   0       5.5     6.4     6.82     9.25   0.0210          6.22 
-#>  6   3.98    5.53    6.4     6.82     9.2    0.0206          6.23 
-#>  7   0       3.38    3.95    4.21     5.69   0.0129          3.84 
-#>  8 326    1200.   3618    5597    18797     68.1          4322.   
-#>  9   0.21    0.5     0.9     1.15     2.57   0.00803         0.894
-#> 10  58      60.5    61.5    62.3     63      0.0196         61.3  
+#>  1 584    1387.   2397    5614.   18531     214.           3282.  
+#>  2   0.34    0.85    1.06    1.82     5.01    0.0518          1.26
+#>  3  55.6    64.7    66.0    67.3     78.2     0.214          65.3 
+#>  4  52      56      58      59       67       0.198          57.7 
+#>  5   4.72    5.96    6.55    7.46    10.7     0.0766          6.57
+#>  6   4.6     5.82    6.42    7.38    10.5     0.0780          6.47
+#>  7   2.6     3.77    4.22    4.86     6.98    0.0524          4.29
+#>  8 536    2763    3681    6266.   18308     182.           4816.  
+#>  9   0.25    0.9     1.01    1.5      3.01    0.0232          1.15
+#> 10  53.1    64.5    65.1    65.9     72.2     0.146          64.1 
 #>    mean.high.conf
 #>             <dbl>
-#>  1       4920.   
-#>  2          1.03 
-#>  3         61.7  
-#>  4         56.2  
-#>  5          6.30 
-#>  6          6.31 
-#>  7          3.90 
-#>  8       4589.   
-#>  9          0.926
-#> 10         61.3  
+#>  1        4125.  
+#>  2           1.46
+#>  3          66.1 
+#>  4          58.5 
+#>  5           6.87
+#>  6           6.77
+#>  7           4.49
+#>  8        5531.  
+#>  9           1.25
+#> 10          64.7 
 #> # ... with 270 more rows
 ```
 
@@ -369,6 +370,8 @@ two relationships of interest for **each country** across years:
 <!-- end list -->
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(gapminder)
 options(tibble.width = Inf) # show me all columns
 
@@ -421,6 +424,8 @@ between carat *and* price of a diamond for each type of clarity *and*
 cut-
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(ggplot2)
 library(dplyr)
 #> 
@@ -478,6 +483,8 @@ There is also robust variant of **simple linear regression** (as
 implemented in `robust::lmRob`)-
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(gapminder)
 library(dplyr)
 options(tibble.width = Inf) # show me all columns
@@ -527,6 +534,8 @@ A more general version of simple linear regression is `stats::lm`,
 implemented in `grouped_lm`:
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(groupedstats)
 #> 
 #> Attaching package: 'groupedstats'
@@ -541,40 +550,42 @@ groupedstats::grouped_lm(
   output = "tidy" # tidy dataframe containing results
 )
 #> # A tibble: 12 x 9
-#>      cyl term        estimate std.error statistic conf.low conf.high
-#>    <dbl> <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-#>  1     4 (Intercept)   13.9      16.1      0.865    -24.1     51.9  
-#>  2     4 am            30.3      17.2      1.77     -10.3     70.9  
-#>  3     4 wt             3.07      5.44     0.564     -9.79    15.9  
-#>  4     4 am:wt        -11.0       6.16    -1.78     -25.5      3.61 
-#>  5     6 (Intercept)   63.6      14.1      4.51      18.7    109.   
-#>  6     6 am           -41.4      19.0     -2.18    -102.      19.1  
-#>  7     6 wt           -13.1       4.16    -3.16     -26.4      0.113
-#>  8     6 am:wt         12.5       6.22     2.02      -7.26    32.4  
-#>  9     8 (Intercept)   25.1       3.51     7.14      17.2     32.9  
-#> 10     8 am            -2.92     25.9     -0.113    -60.5     54.7  
-#> 11     8 wt            -2.44      0.842   -2.90      -4.32    -0.563
-#> 12     8 am:wt          0.439     7.63     0.0575   -16.6     17.4  
-#>      p.value significance
+#>      cyl term        estimate std.error statistic   p.value conf.low
+#>    <dbl> <chr>          <dbl>     <dbl>     <dbl>     <dbl>    <dbl>
+#>  1     4 (Intercept)   13.9      16.1      0.865  0.416       -24.1 
+#>  2     4 am            30.3      17.2      1.77   0.121       -10.3 
+#>  3     4 wt             3.07      5.44     0.564  0.590        -9.79
+#>  4     4 am:wt        -11.0       6.16    -1.78   0.118       -25.5 
+#>  5     6 (Intercept)   63.6      14.1      4.51   0.0204       18.7 
+#>  6     6 am           -41.4      19.0     -2.18   0.117      -102.  
+#>  7     6 wt           -13.1       4.16    -3.16   0.0511      -26.4 
+#>  8     6 am:wt         12.5       6.22     2.02   0.137        -7.26
+#>  9     8 (Intercept)   25.1       3.51     7.14   0.0000315    17.2 
+#> 10     8 am            -2.92     25.9     -0.113  0.912       -60.5 
+#> 11     8 wt            -2.44      0.842   -2.90   0.0159       -4.32
+#> 12     8 am:wt          0.439     7.63     0.0575 0.955       -16.6 
+#>    conf.high significance
 #>        <dbl> <chr>       
-#>  1 0.416     ns          
-#>  2 0.121     ns          
-#>  3 0.590     ns          
-#>  4 0.118     ns          
-#>  5 0.0204    *           
-#>  6 0.117     ns          
-#>  7 0.0511    ns          
-#>  8 0.137     ns          
-#>  9 0.0000315 ***         
-#> 10 0.912     ns          
-#> 11 0.0159    *           
-#> 12 0.955     ns
+#>  1    51.9   ns          
+#>  2    70.9   ns          
+#>  3    15.9   ns          
+#>  4     3.61  ns          
+#>  5   109.    *           
+#>  6    19.1   ns          
+#>  7     0.113 ns          
+#>  8    32.4   ns          
+#>  9    32.9   ***         
+#> 10    54.7   ns          
+#> 11    -0.563 *           
+#> 12    17.4   ns
 ```
 
 The same function can also be used to get model summaries instead of a
 tidy dataframe containing results-
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(groupedstats)
 
 groupedstats::grouped_lm(
@@ -620,6 +631,8 @@ function. The estimate in this case with be an effect size (either
 partial eta-squared or partial omega-squared).
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(groupedstats)
 
 groupedstats::grouped_aov(
@@ -629,17 +642,17 @@ groupedstats::grouped_aov(
   output = "tidy" # tidy dataframe with results
 )
 #> # A tibble: 9 x 10
-#>     cyl term  F.value   df1   df2 partial.etasq conf.low conf.high p.value
-#>   <dbl> <chr>   <dbl> <dbl> <dbl>         <dbl>    <dbl>     <dbl>   <dbl>
-#> 1     6 am    5.07        1     3      0.628      0         0.820   0.110 
-#> 2     6 wt    5.91        1     3      0.663      0         0.835   0.0933
-#> 3     6 am:wt 4.06        1     3      0.575      0         0.796   0.137 
-#> 4     4 am    5.95        1     7      0.459      0         0.711   0.0448
-#> 5     4 wt    4.59        1     7      0.396      0         0.676   0.0693
-#> 6     4 am:wt 3.17        1     7      0.311      0         0.627   0.118 
-#> 7     8 am    0.0456      1    10      0.00454    0         0.242   0.835 
-#> 8     8 wt    8.45        1    10      0.458      0.0190    0.691   0.0156
-#> 9     8 am:wt 0.00331     1    10      0.000330   0         0.0885  0.955 
+#>     cyl term  F.value   df1   df2 p.value partial.etasq conf.low conf.high
+#>   <dbl> <chr>   <dbl> <dbl> <dbl>   <dbl>         <dbl>    <dbl>     <dbl>
+#> 1     6 am    5.07        1     3  0.110       0.628      0         0.820 
+#> 2     6 wt    5.91        1     3  0.0933      0.663      0         0.835 
+#> 3     6 am:wt 4.06        1     3  0.137       0.575      0         0.796 
+#> 4     4 am    5.95        1     7  0.0448      0.459      0         0.711 
+#> 5     4 wt    4.59        1     7  0.0693      0.396      0         0.676 
+#> 6     4 am:wt 3.17        1     7  0.118       0.311      0         0.627 
+#> 7     8 am    0.0456      1    10  0.835       0.00454    0         0.242 
+#> 8     8 wt    8.45        1    10  0.0156      0.458      0.0190    0.691 
+#> 9     8 am:wt 0.00331     1    10  0.955       0.000330   0         0.0885
 #>   significance
 #>   <chr>       
 #> 1 ns          
@@ -659,6 +672,8 @@ in life expectancy between different continents for all years for which
 the gapminder survey was conducted:
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(groupedstats)
 library(gapminder)
 
@@ -708,6 +723,9 @@ The option to run generalized linear model (`stats::glm`) across
 different levels of the grouping variable is also implemented similarly-
 
 ``` r
+# for reproducibility
+set.seed(123)
+
 groupedstats::grouped_glm(
   data = ggstatsplot::Titanic_full,
   formula = Survived ~ Sex,
@@ -716,26 +734,26 @@ groupedstats::grouped_glm(
   output = "tidy"
 )
 #> # A tibble: 8 x 9
-#>   Class term        estimate std.error statistic conf.low conf.high
-#>   <fct> <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-#> 1 1st   (Intercept)    3.56      0.507      7.03    2.70      4.74 
-#> 2 1st   SexMale       -4.21      0.531     -7.92   -5.42     -3.29 
-#> 3 2nd   (Intercept)    1.97      0.296      6.65    1.43      2.60 
-#> 4 2nd   SexMale       -3.79      0.366    -10.3    -4.54     -3.10 
-#> 5 3rd   (Intercept)   -0.164     0.143     -1.14   -0.446     0.117
-#> 6 3rd   SexMale       -1.40      0.185     -7.58   -1.77     -1.04 
-#> 7 Crew  (Intercept)    1.90      0.619      3.06    0.827     3.34 
-#> 8 Crew  SexMale       -3.15      0.625     -5.04   -4.60     -2.06 
-#>    p.value significance
-#>      <dbl> <chr>       
-#> 1 2.13e-12 ***         
-#> 2 2.29e-15 ***         
-#> 3 3.03e-11 ***         
-#> 4 4.88e-25 ***         
-#> 5 2.54e- 1 ns          
-#> 6 3.36e-14 ***         
-#> 7 2.18e- 3 **          
-#> 8 4.68e- 7 ***
+#>   Class term        estimate std.error statistic  p.value conf.low
+#>   <fct> <chr>          <dbl>     <dbl>     <dbl>    <dbl>    <dbl>
+#> 1 1st   (Intercept)    3.56      0.507      7.03 2.13e-12    2.70 
+#> 2 1st   SexMale       -4.21      0.531     -7.92 2.29e-15   -5.42 
+#> 3 2nd   (Intercept)    1.97      0.296      6.65 3.03e-11    1.43 
+#> 4 2nd   SexMale       -3.79      0.366    -10.3  4.88e-25   -4.54 
+#> 5 3rd   (Intercept)   -0.164     0.143     -1.14 2.54e- 1   -0.446
+#> 6 3rd   SexMale       -1.40      0.185     -7.58 3.36e-14   -1.77 
+#> 7 Crew  (Intercept)    1.90      0.619      3.06 2.18e- 3    0.827
+#> 8 Crew  SexMale       -3.15      0.625     -5.04 4.68e- 7   -4.60 
+#>   conf.high significance
+#>       <dbl> <chr>       
+#> 1     4.74  ***         
+#> 2    -3.29  ***         
+#> 3     2.60  ***         
+#> 4    -3.10  ***         
+#> 5     0.117 ns          
+#> 6    -1.04  ***         
+#> 7     3.34  **          
+#> 8    -2.06  ***
 ```
 
 Note that the `statistic` will either be a `t` (gaussian, e.g.) or a `z`
@@ -745,6 +763,9 @@ You can also get a model summary across all models with `broom::glance`
 methods-
 
 ``` r
+# for reproducibility
+set.seed(123)
+
 groupedstats::grouped_glm(
   data = ggstatsplot::Titanic_full,
   formula = Survived ~ Sex,
@@ -767,6 +788,8 @@ Linear mixed effects analyses (`lme4::lmer`) for all combinations of
 grouping variable levels can be carried out using `grouped_lmer`:
 
 ``` r
+# for reproducibility
+set.seed(123)
 library(gapminder)
 
 # getting tidy output of results
@@ -817,7 +840,6 @@ groupedstats::grouped_lmer(
 #> 10     0.724 0.00402 **          
 #> # ... with 14 more rows
 
-
 # getting tidy output of results
 groupedstats::grouped_lmer(
   data = gapminder,
@@ -852,8 +874,11 @@ we want to see if sex of a person was predictive of whether they
 survived the Titanic tragedy.
 
 ``` r
+# for reproducibility
+set.seed(123)
+
 # having a look at the data
-dplyr::glimpse(x = groupedstats::Titanic_full)
+dplyr::glimpse(groupedstats::Titanic_full)
 #> Observations: 2,201
 #> Variables: 5
 #> $ id       <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
@@ -878,18 +903,18 @@ groupedstats::grouped_glmer(
   output = "tidy"
 )
 #> # A tibble: 4 x 10
-#>   Sex    effect term        estimate std.error statistic conf.low conf.high
-#>   <fct>  <chr>  <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-#> 1 Male   fixed  (Intercept)   -0.888     0.162     -5.47   -1.21     -0.570
-#> 2 Male   fixed  AgeChild       4.90      4.03       1.22   -3.00     12.8  
-#> 3 Female fixed  (Intercept)    1.01      0.379      2.66    0.264     1.75 
-#> 4 Female fixed  AgeChild       1.47      0.595      2.48    0.307     2.64 
-#>        p.value significance
-#>          <dbl> <chr>       
-#> 1 0.0000000453 ***         
-#> 2 0.224        ns          
-#> 3 0.00789      **          
-#> 4 0.0133       *
+#>   Sex    effect term        estimate std.error statistic      p.value
+#>   <fct>  <chr>  <chr>          <dbl>     <dbl>     <dbl>        <dbl>
+#> 1 Male   fixed  (Intercept)   -0.888     0.162     -5.47 0.0000000453
+#> 2 Male   fixed  AgeChild       4.90      4.03       1.22 0.224       
+#> 3 Female fixed  (Intercept)    1.01      0.379      2.66 0.00789     
+#> 4 Female fixed  AgeChild       1.47      0.595      2.48 0.0133      
+#>   conf.low conf.high significance
+#>      <dbl>     <dbl> <chr>       
+#> 1   -1.21     -0.570 ***         
+#> 2   -3.00     12.8   ns          
+#> 3    0.264     1.75  **          
+#> 4    0.307     2.64  *
 
 # getting glmer model summaries (let's use the default family and control values)
 groupedstats::grouped_glmer(
@@ -916,6 +941,8 @@ This function helps carry out one-sample proportion tests
 variables-
 
 ``` r
+# for reproducibility
+set.seed(123)
 options(tibble.width = Inf) # show me all columns
 
 groupedstats::grouped_proptest(
@@ -941,6 +968,8 @@ has greater measurement (length or width) than `Petal` part of the
 flower for **each** *Iris* species.
 
 ``` r
+# for reproducibility
+set.seed(123)
 
 # converting the iris dataset to long format
 iris_long <- iris %>%
@@ -1013,8 +1042,8 @@ groupedstats::grouped_ttest(
 This function is just a non-parametric variant of the `grouped_ttest`:
 
 ``` r
-# checking if the Sepal part has different dimentions (value) than Petal part
-# for each Species and for each type of measurement (Length and Width)
+# for reproducibility
+set.seed(123)
 options(tibble.width = Inf) # show me all columns
 
 groupedstats::grouped_wilcox(
@@ -1059,6 +1088,8 @@ and depth of a diamond is different for two of our favorite colors (say
 `E` and `J`) for each type of clarity.
 
 ``` r
+# for reproducibility
+set.seed(123)
 
 # subset the dataframe with two colors of interest to us
 diamonds_short <-
@@ -1181,6 +1212,9 @@ We can further focus just on two levels of clarity to further elucidate
 another aspect of entering the arguments-
 
 ``` r
+# for reproducibility
+set.seed(123)
+
 # subset the dataframe even further to just select two levels of clarity
 diamonds_short2 <-
   dplyr::filter(.data = diamonds_short, clarity == "SI2" |
@@ -1248,10 +1282,12 @@ For example, let’s say we want to run the same linear regression across
 multiple grouping variables but want to use different formulas-
 
 ``` r
+# for reproducibility
 set.seed(123)
 library(groupedstats)
 
-results_df <- purrr::pmap_dfr(
+results_df <- 
+  purrr::pmap_dfr(
   .l = list(
     data = list(groupedstats::movies_long),
     grouping.vars = alist(c(mpaa, genre)), # note it's `alist` and not `list`
@@ -1300,9 +1336,22 @@ functions involved:
 
 I’m happy to receive bug reports, suggestions, questions, and (most of
 all) contributions to fix problems and add features. I personally prefer
-using the `Github` issues system over trying to reach out to me in other
-ways (personal e-mail, Twitter, etc.). Pull requests for contributions
+using the `GitHub` issues system over trying to reach out to me in other
+ways (personal e-mail, Twitter, etc.). Pull Requests for contributions
 are encouraged.
+
+Here are some simple ways in which you can contribute (in the increasing
+order of commitment):
+
+  - Read and correct any inconsistencies in the
+    [documentation](https://indrajeetpatil.github.io/groupedstats/)
+
+  - Raise issues about bugs or wanted features
+
+  - Review code
+
+  - Add new functionality (in the form of new plotting functions or
+    helpers for preparing subtitles)
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/IndrajeetPatil/groupedstats/blob/master/CODE_OF_CONDUCT.md).
@@ -1311,4 +1360,5 @@ By participating in this project you agree to abide by its terms.
 ## Suggestions
 
 If you find any bugs or have any suggestions/remarks, please file an
-issue on GitHub: <https://github.com/IndrajeetPatil/groupedstats/issues>
+issue on `GitHub`:
+<https://github.com/IndrajeetPatil/groupedstats/issues>

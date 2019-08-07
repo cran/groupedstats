@@ -1,5 +1,6 @@
 #' @title Function to run two-sample Wilcoxon tests on multiple variables across
 #'   multiple grouping variables.
+#' @title Running Wilcox test across multiple grouping variables.
 #' @name grouped_wilcox
 #' @author Indrajeet Patil
 #' @return A tibble dataframe with tidy results from two-sample Wilcoxon tests
@@ -10,7 +11,8 @@
 #'   in `y ~ x`).
 #' @param indep.vars List independent variables for a two-sample Wilcoxon tests
 #'   (`x` in `y ~ x`).
-#' @param grouping.vars List of grouping variables.
+#' @param grouping.vars List of grouping variables (if `NULL`, the entire
+#'   dataframe will be used).
 #' @param paired A logical indicating whether you want a paired two-sample
 #'   Wilcoxon tests (Default: `paired = FALSE`).
 #' @param correct A logical indicating whether to apply continuity correction in
@@ -21,7 +23,11 @@
 #' @importFrom stats wilcox.test as.formula
 #' @importFrom tidyr nest
 #'
+#' @seealso \code{\link{grouped_tidy}}
+#'
 #' @examples
+#' # for reproducibility
+#' set.seed(123)
 #'
 #' # only with one grouping variable
 #' groupedstats::grouped_wilcox(
@@ -43,8 +49,7 @@ grouped_wilcox <- function(data,
   # ================== preparing dataframe ==================
   #
   # check how many variables were entered for criterion variables vector
-  dep.vars <-
-    as.list(rlang::quo_squash(rlang::enquo(dep.vars)))
+  dep.vars <- as.list(rlang::quo_squash(rlang::enquo(dep.vars)))
   dep.vars <-
     if (length(dep.vars) == 1) {
       dep.vars
@@ -53,8 +58,7 @@ grouped_wilcox <- function(data,
     }
 
   # check how many variables were entered for predictor variables vector
-  indep.vars <-
-    as.list(rlang::quo_squash(rlang::enquo(indep.vars)))
+  indep.vars <- as.list(rlang::quo_squash(rlang::enquo(indep.vars)))
   indep.vars <-
     if (length(indep.vars) == 1) {
       indep.vars
@@ -63,8 +67,7 @@ grouped_wilcox <- function(data,
     }
 
   # check how many variables were entered for grouping variable vector
-  grouping.vars <-
-    as.list(rlang::quo_squash(rlang::enquo(grouping.vars)))
+  grouping.vars <- as.list(rlang::quo_squash(rlang::enquo(grouping.vars)))
   grouping.vars <-
     if (length(grouping.vars) == 1) {
       grouping.vars
@@ -73,12 +76,8 @@ grouped_wilcox <- function(data,
     }
 
   # getting the dataframe ready
-  df <- dplyr::select(
-    .data = data,
-    !!!grouping.vars,
-    !!!dep.vars,
-    !!!indep.vars
-  ) %>%
+  df <-
+    dplyr::select(.data = data, !!!grouping.vars, !!!dep.vars, !!!indep.vars) %>%
     dplyr::group_by(.data = ., !!!grouping.vars) %>%
     tidyr::nest(data = .) %>%
     dplyr::filter(.data = ., !purrr::map_lgl(.x = data, .f = is.null)) %>%
@@ -87,56 +86,55 @@ grouped_wilcox <- function(data,
   # ============== custom function ================
 
   # custom function to run linear regression for every element of a list for two variables
-  lm_listed <-
-    function(list.col,
-                 x_name,
-                 y_name,
-                 paired,
-                 correct) {
-      # plain version of the formula to return
-      fx <- glue::glue("{y_name} ~ {x_name}")
+  lm_listed <- function(list.col,
+                          x_name,
+                          y_name,
+                          paired,
+                          correct) {
+    # plain version of the formula to return
+    fx <- glue::glue("{y_name} ~ {x_name}")
 
-      # dataframe with results from wilcox tests
-      results_df <-
-        list.col %>% # running two-sample Wilcoxon tests on each individual group with purrr
-        purrr::map(
-          .x = .,
-          .f = ~ stats::wilcox.test(
-            formula = stats::as.formula(fx),
-            mu = 0,
-            paired = paired,
-            alternative = "two.sided",
-            conf.level = 0.95,
-            na.action = na.omit,
-            exact = NULL,
-            correct = correct,
-            conf.int = TRUE,
-            data = (.)
-          )
-        ) %>% # tidying up the output with broom
-        purrr::map_dfr(
-          .x = .,
-          .f = ~ broomExtra::tidy(x = .),
-          .id = "..group"
-        ) %>% # add formula as a character
-        dplyr::mutate(.data = ., formula = as.character(fx)) %>% # rearrange the dataframe
-        dplyr::select(
-          .data = .,
-          `..group`,
-          formula,
-          method,
-          statistic,
-          estimate,
-          conf.low,
-          conf.high,
-          p.value,
-          alternative
-        ) %>% # convert to a tibble dataframe
-        tibble::as_tibble(x = .)
+    # dataframe with results from wilcox tests
+    results_df <-
+      list.col %>% # running two-sample Wilcoxon tests on each individual group with purrr
+      purrr::map(
+        .x = .,
+        .f = ~ stats::wilcox.test(
+          formula = stats::as.formula(fx),
+          mu = 0,
+          paired = paired,
+          alternative = "two.sided",
+          conf.level = 0.95,
+          na.action = na.omit,
+          exact = NULL,
+          correct = correct,
+          conf.int = TRUE,
+          data = (.)
+        )
+      ) %>% # tidying up the output with broom
+      purrr::map_dfr(
+        .x = .,
+        .f = ~ broomExtra::tidy(x = .),
+        .id = "..group"
+      ) %>% # add formula as a character
+      dplyr::mutate(.data = ., formula = as.character(fx)) %>% # rearrange the dataframe
+      dplyr::select(
+        .data = .,
+        `..group`,
+        formula,
+        method,
+        statistic,
+        estimate,
+        conf.low,
+        conf.high,
+        p.value,
+        alternative
+      ) %>% # convert to a tibble dataframe
+      tibble::as_tibble(x = .)
 
-      # return the dataframe
-      return(results_df)
-    }
+    # return the dataframe
+    return(results_df)
+  }
 
   # ========= using  custom function on entered dataframe =================
 

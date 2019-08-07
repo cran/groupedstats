@@ -2,8 +2,8 @@
 % Please edit documentation in R/grouped_summary.R
 \name{grouped_summary}
 \alias{grouped_summary}
-\title{Function to get descriptive statistics for multiple variables for all
-grouping variable levels}
+\title{Descriptive statistics for multiple variables for all grouping
+variable levels}
 \usage{
 grouped_summary(data, grouping.vars, measures = NULL,
   measures.type = "numeric", topcount.long = FALSE)
@@ -32,25 +32,26 @@ Dataframe with descriptive statistics for numeric variables (n, mean,
 sd, median, min, max)
 }
 \description{
-Function to get descriptive statistics for multiple variables for all
-grouping variable levels
+Descriptive statistics for multiple variables for all grouping
+variable levels
 }
 \examples{
+# for reproducibility
+set.seed(123)
 
 # another possibility
 groupedstats::grouped_summary(
-  data = datasets::iris,
+  data = iris,
   grouping.vars = Species,
   measures = Sepal.Length:Petal.Width,
   measures.type = "numeric"
 )
 
-# if you have just one variable per argument, you need not use `c()`
+# if no measures are chosen, all relevant columns will be summarized
 groupedstats::grouped_summary(
-  data = datasets::ToothGrowth,
-  grouping.vars = supp,
-  measures = len,
-  measures.type = "numeric"
+  data = ggplot2::msleep,
+  grouping.vars = vore,
+  measures.type = "factor"
 )
 }
 \author{
