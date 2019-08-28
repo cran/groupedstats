@@ -1,3 +1,10 @@
+# groupedstats 0.0.9
+
+MAJOR CHANGES
+
+  - Major refactoring of all generalized regression model functions using
+    `broomExtra` generic functions.
+
 # groupedstats 0.0.8
 
 BREAKING CHANGES
