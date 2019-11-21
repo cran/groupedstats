@@ -6,7 +6,8 @@
 #'   sd, median, min, max)
 #'
 #' @param data Dataframe from which variables need to be taken.
-#' @param grouping.vars A list of grouping variables.
+#' @param grouping.vars A list of grouping variables. Please use unquoted
+#'   arguments (i.e., use `x` and not `"x"`).
 #' @param measures List variables for which summary needs to computed. If not
 #'   specified, all variables of type specified in the argument `measures.type`
 #'   will be used to calculate summaries. **Don't** explicitly set
@@ -18,15 +19,19 @@
 #'   both numeric **and** variables simultaneously.
 #' @param topcount.long If `measures.type = factor`, you can get the top counts
 #'   in long format for plotting purposes. (Default: `topcount.long = FALSE`).
+#' @inheritParams specify_decimal_p
+#' @param ... Currently ignored.
 #'
 #' @importFrom skimr skim
-#' @importFrom dplyr filter_at mutate_at mutate_if group_modify group_nest any_vars
+#' @importFrom dplyr filter_at mutate_at mutate_if any_vars tally
+#' @importFrom dplyr group_modify group_nest
 #' @importFrom purrr is_bare_numeric is_bare_character keep map map_lgl map_dfr
+#' @importFrom purrr flatten_lgl set_names map_chr
 #' @importFrom tidyr unnest separate
-#' @importFrom crayon red blue
 #' @importFrom tibble as_tibble enframe
 #' @importFrom stats qt
-#' @importFrom utils packageVersion
+#' @importFrom sjlabelled is_labelled remove_all_labels
+#' @importFrom rlang !! !!! as_string
 #'
 #' @examples
 #' # for reproducibility
@@ -46,6 +51,15 @@
 #'   grouping.vars = vore,
 #'   measures.type = "factor"
 #' )
+#'
+#' # for factors, you can also convert the dataframe to long format with counts
+#' groupedstats::grouped_summary(
+#'   data = ggplot2::msleep,
+#'   grouping.vars = c(vore),
+#'   measures = c(genus:order),
+#'   measures.type = "factor",
+#'   topcount.long = TRUE
+#' )
 #' @export
 
 # function body
@@ -53,12 +67,9 @@ grouped_summary <- function(data,
                             grouping.vars,
                             measures = NULL,
                             measures.type = "numeric",
-                            topcount.long = FALSE) {
-  # check -------------------------------------------------------------------
-
-  if (utils::packageVersion("skimr") >= "2.0") {
-    stop(message("This package is currently not compatible with `skimr 2.0` package."))
-  }
+                            topcount.long = FALSE,
+                            k = 2L,
+                            ...) {
 
   # data -------------------------------------------------------------------
 
@@ -83,9 +94,14 @@ grouped_summary <- function(data,
     df <- dplyr::select(.data = data, !!!grouping.vars, {{ measures }})
   }
 
-  # summary -------------------------------------------------------------------
+  # data cleanup -------------------------------------------------------------
 
-  # removing grouping levels that are NA
+  # clean up labeled columns, if present
+  if (sum(purrr::flatten_lgl(purrr::map(df, sjlabelled::is_labelled))) > 0L) {
+    df %<>% sjlabelled::remove_all_labels(.)
+  }
+
+  # removing grouping levels that are `NA`
   df %<>%
     dplyr::filter_at(
       .tbl = .,
@@ -98,30 +114,41 @@ grouped_summary <- function(data,
       .funs = as.factor
     )
 
+  # summary -------------------------------------------------------------------
+
+  # skimming across groups
+  df_results <- dplyr::group_by(.data = df, !!!grouping.vars, .drop = TRUE)
+
   # what to retain depends on the type of columns needed
   if (measures.type == "numeric") {
-    ..f <- purrr::is_bare_numeric
+    ..f <- base::is.numeric
   } else {
     ..f <- base::is.factor
   }
 
-  # skimming across groups
-  df_results <- df %>%
-    dplyr::group_by(.data = ., !!!grouping.vars, .drop = TRUE) %>%
-    dplyr::group_modify(
-      .tbl = .,
-      .f = ~ tibble::as_tibble(skimr::skim_to_wide(
-        purrr::keep(.x = ., .p = ..f)
-      )),
-      keep = FALSE
+  # format the number of digits in `skimr` output
+  df_skim <-
+    dplyr::left_join(
+      x = df_results %>%
+        dplyr::group_modify(
+          .f = ~ tibble::as_tibble(skimr::skim(purrr::keep(
+            .x = ., .p = ..f
+          ))),
+          keep = FALSE
+        ) %>%
+        dplyr::ungroup(x = .),
+      y = dplyr::tally(df_results),
+      by = purrr::map_chr(.x = grouping.vars, .f = rlang::as_string)
     ) %>%
-    dplyr::ungroup(x = .)
+    dplyr::mutate(.data = ., n = n - n_missing) %>% # changing column names
+    purrr::set_names(x = ., nm = ~ sub("numeric.|factor.|^n_|_rate$", "", .x)) %>%
+    dplyr::rename(.data = ., variable = skim_variable)
 
   # factor long format conversion --------------------------------------------
 
   if (measures.type %in% c("factor", "character") && isTRUE(topcount.long)) {
     # converting to long format using the custom function
-    df_results %<>%
+    df_skim %<>%
       dplyr::group_nest(
         .tbl = .,
         !!!grouping.vars,
@@ -137,8 +164,7 @@ grouped_summary <- function(data,
           )
       ) %>%
       dplyr::select(.data = ., -data) %>%
-      tidyr::unnest(.)
-    # tidyr::unnest(., cols = c(long.counts)) # for tidyr 0.8.9
+      tidyr::unnest(data = ., cols = c(long.counts))
   }
 
   # renaming numeric variable ----------------------------------------------
@@ -146,12 +172,7 @@ grouped_summary <- function(data,
   if (measures.type == "numeric") {
     # changing class of summary variables if these are numeric variables
     df_summary <-
-      df_results %>%
-      dplyr::mutate_at(
-        .tbl = .,
-        .vars = dplyr::vars(missing:p100),
-        .funs = ~ as.numeric(as.character(.)) # change summary variables to numeric
-      ) %>% # renaming variables to more common terminology
+      df_skim %>%
       dplyr::rename(
         .data = .,
         min = p0,
@@ -161,23 +182,25 @@ grouped_summary <- function(data,
       dplyr::mutate(
         .data = .,
         std.error = sd / sqrt(n),
-        mean.low.conf = mean - stats::qt(
+        mean.conf.low = mean - stats::qt(
           p = 1 - (0.05 / 2),
           df = n - 1,
           lower.tail = TRUE
         ) * std.error,
-        mean.high.conf = mean + stats::qt(
+        mean.conf.high = mean + stats::qt(
           p = 1 - (0.05 / 2),
           df = n - 1,
           lower.tail = TRUE
         ) * std.error
       )
   } else {
-    df_summary <- df_results
+    df_summary <- df_skim
   }
 
   # remove the histogram column
-  if ("hist" %in% names(df_summary)) df_summary %<>% dplyr::select(.data = ., -hist)
+  if ("hist" %in% names(df_summary)) {
+    df_summary %<>% dplyr::select(.data = ., -hist)
+  }
 
   # return the summary dataframe
   return(df_summary)
@@ -199,5 +222,6 @@ count_long_format_fn <- function(top_counts) {
         sep = ":",
         convert = TRUE
       )
-  )
+  ) %>%
+    dplyr::select(.data = ., -name)
 }

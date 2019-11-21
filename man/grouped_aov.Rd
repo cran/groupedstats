@@ -4,8 +4,15 @@
 \alias{grouped_aov}
 \title{Running analysis of variance (aov) across multiple grouping variables.}
 \usage{
-grouped_aov(data, grouping.vars, formula, effsize = "eta",
-  output = "tidy", nboot = 1000)
+grouped_aov(
+  data,
+  grouping.vars,
+  formula,
+  effsize = "eta",
+  output = "tidy",
+  nboot = 1000,
+  ...
+)
 }
 \arguments{
 \item{data}{A data frame in which the variables specified in the
@@ -27,25 +34,32 @@ summary is currently not supported for this function.}
 
 \item{nboot}{Number of bootstrap samples for confidence intervals for partial
 eta-squared and omega-squared (Default: \code{500}).}
-}
-\value{
-A tibble dataframe with tidy results from anova. No model summaries
-available.
+
+\item{...}{Currently ignored.}
 }
 \description{
 Running analysis of variance (aov) across multiple grouping variables.
 }
 \examples{
 
-# uses dataset included in the groupedstats package
+# uses dataset included in the `groupedstats` package
 set.seed(123)
 library(groupedstats)
 
+# effect size
 groupedstats::grouped_aov(
   formula = rating ~ belief * outcome * question,
   data = intent_morality,
   grouping.vars = item,
   effsize = "eta"
+)
+
+# pairwise comparisons
+groupedstats::grouped_aov(
+  formula = rating ~ belief * outcome * question,
+  data = intent_morality,
+  grouping.vars = item,
+  output = "tukey"
 )
 }
 \author{

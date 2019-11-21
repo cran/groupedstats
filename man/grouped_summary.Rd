@@ -5,13 +5,21 @@
 \title{Descriptive statistics for multiple variables for all grouping
 variable levels}
 \usage{
-grouped_summary(data, grouping.vars, measures = NULL,
-  measures.type = "numeric", topcount.long = FALSE)
+grouped_summary(
+  data,
+  grouping.vars,
+  measures = NULL,
+  measures.type = "numeric",
+  topcount.long = FALSE,
+  k = 2L,
+  ...
+)
 }
 \arguments{
 \item{data}{Dataframe from which variables need to be taken.}
 
-\item{grouping.vars}{A list of grouping variables.}
+\item{grouping.vars}{A list of grouping variables. Please use unquoted
+arguments (i.e., use \code{x} and not \code{"x"}).}
 
 \item{measures}{List variables for which summary needs to computed. If not
 specified, all variables of type specified in the argument \code{measures.type}
@@ -26,6 +34,11 @@ both numeric \strong{and} variables simultaneously.}
 
 \item{topcount.long}{If \code{measures.type = factor}, you can get the top counts
 in long format for plotting purposes. (Default: \code{topcount.long = FALSE}).}
+
+\item{k}{Number of digits after decimal point (should be an integer)
+(Default: \code{k = 3}).}
+
+\item{...}{Currently ignored.}
 }
 \value{
 Dataframe with descriptive statistics for numeric variables (n, mean,
@@ -52,6 +65,15 @@ groupedstats::grouped_summary(
   data = ggplot2::msleep,
   grouping.vars = vore,
   measures.type = "factor"
+)
+
+# for factors, you can also convert the dataframe to long format with counts
+groupedstats::grouped_summary(
+  data = ggplot2::msleep,
+  grouping.vars = c(vore),
+  measures = c(genus:order),
+  measures.type = "factor",
+  topcount.long = TRUE
 )
 }
 \author{

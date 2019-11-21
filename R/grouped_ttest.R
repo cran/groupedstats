@@ -17,12 +17,12 @@
 #'   *t*-test, i.e.).
 #'
 #' @importFrom glue glue
-#' @importFrom purrr map map2_dfr pmap map_lgl
+#' @importFrom purrr map pmap map_lgl
 #' @importFrom stats wilcox.test as.formula t.test
 #' @importFrom tidyr nest
 #' @importFrom rlang !! enquos enquo quo quo_squash
 #' @importFrom dplyr select group_by arrange mutate mutate_at mutate_if
-#' @importFrom dplyr left_join right_join
+#' @importFrom dplyr left_join
 #'
 #' @examples
 #' # for reproducibility
@@ -87,10 +87,10 @@ grouped_ttest <- function(data,
   # custom function to run linear regression for every element of a list for two
   # variables
   lm_listed <- function(list.col,
-                          x_name,
-                          y_name,
-                          paired,
-                          var.equal) {
+                        x_name,
+                        y_name,
+                        paired,
+                        var.equal) {
     # plain version of the formula to return
     fx <- glue::glue("{y_name} ~ {x_name}")
 

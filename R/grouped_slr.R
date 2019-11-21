@@ -14,12 +14,12 @@
 #'   linear model (`x` in `y ~ x`).
 #'
 #' @importFrom glue glue
-#' @importFrom purrr map map2_dfr pmap
+#' @importFrom purrr map pmap
 #' @importFrom stats wilcox.test as.formula lm
 #' @importFrom tidyr nest
 #' @importFrom rlang !! enquos enquo quo quo_squash
 #' @importFrom dplyr select group_by arrange mutate mutate_at mutate_if
-#' @importFrom dplyr left_join right_join
+#' @importFrom dplyr left_join
 #'
 #' @seealso \code{\link{grouped_lm}}, \code{\link{grouped_tidy}}
 #'

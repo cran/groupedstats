@@ -19,7 +19,7 @@
 #'   the normal approximation for the p-value (Default: `correct = TRUE`).
 #'
 #' @importFrom glue glue
-#' @importFrom purrr map map2_dfr pmap
+#' @importFrom purrr map pmap
 #' @importFrom stats wilcox.test as.formula
 #' @importFrom tidyr nest
 #'
@@ -87,10 +87,10 @@ grouped_wilcox <- function(data,
 
   # custom function to run linear regression for every element of a list for two variables
   lm_listed <- function(list.col,
-                          x_name,
-                          y_name,
-                          paired,
-                          correct) {
+                        x_name,
+                        y_name,
+                        paired,
+                        correct) {
     # plain version of the formula to return
     fx <- glue::glue("{y_name} ~ {x_name}")
 
