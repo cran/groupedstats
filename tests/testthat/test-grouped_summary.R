@@ -5,6 +5,7 @@ context("grouped_summary")
 testthat::test_that(
   desc = "grouped_summary with numeric measures",
   code = {
+    testthat::skip_if(getRversion() < "3.6")
     set.seed(123)
 
     # without measures specified (without NA)
@@ -33,11 +34,19 @@ testthat::test_that(
       measures = c(sleep_total:awake)
     ))
 
+    # more than one group
+    df5 <- groupedstats::grouped_summary(
+      data = ggplot2::diamonds,
+      grouping.vars = c(cut, clarity),
+      measures = x
+    )
+
     # testing dimensions
     testthat::expect_equal(dim(df1), c(12L, 16L))
     testthat::expect_equal(dim(df2), c(9L, 16L))
     testthat::expect_equal(dim(df3), c(24L, 16L))
     testthat::expect_equal(dim(df4), c(16L, 16L))
+    testthat::expect_equal(dim(df5), c(40L, 17L))
 
     # testing few values
     testthat::expect_equal(df1$mean, c(
@@ -71,6 +80,7 @@ testthat::test_that(
 testthat::test_that(
   desc = "grouped_summary with factor measures",
   code = {
+    testthat::skip_if(getRversion() < "3.6")
     set.seed(123)
 
     # without measures specified (without NA)

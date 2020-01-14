@@ -1,3 +1,10 @@
+# groupedstats 0.1.0.9000
+
+BREAKING CHANGES
+
+  - The R package `robust` was recently orphaned. Because of this,
+    `grouped_robustslr` has been removed.
+ 
 # groupedstats 0.1.0
 
 BREAKING CHANGES
