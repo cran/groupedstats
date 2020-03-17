@@ -1,3 +1,9 @@
+# groupedstats 0.2.1
+
+  - `grouped_summary` function failed when the dataframe contained a column
+    named `variable` (#24). This is fixed.
+  - Makes package compatible with the new releases of `rlang` and `tidyselect`.
+
 # groupedstats 0.2.0
 
   - This is a maintenance release that gets rid of some of the internal

@@ -1,7 +1,7 @@
 Type: Package
 Package: groupedstats
 Title: Grouped Statistical Analyses in a Tidy Way
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person(given = "Indrajeet",
            family = "Patil",
@@ -17,15 +17,14 @@ URL: https://indrajeetpatil.github.io/groupedstats/,
 BugReports: https://github.com/IndrajeetPatil/groupedstats/issues/
 Depends: R (>= 3.5.0)
 Imports: broomExtra, dplyr, glue, haven, ipmisc, lme4, parameters,
-        purrr, rlang, rstudioapi, sjstats, skimr, stats, tibble, tidyr
+        purrr, rlang, sjstats, skimr, stats, tibble, tidyr
 Suggests: ez, gapminder, ggplot2, knitr, rmarkdown, spelling, testthat
-VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.0.2.9000
+RoxygenNote: 7.1.0.9000
 NeedsCompilation: no
-Packaged: 2020-02-28 08:30:31 UTC; inp099
+Packaged: 2020-03-17 18:57:46 UTC; inp099
 Author: Indrajeet Patil [aut, cre] (<https://orcid.org/0000-0003-1995-6531>)
 Repository: CRAN
-Date/Publication: 2020-02-28 12:10:09 UTC
+Date/Publication: 2020-03-17 19:40:02 UTC
