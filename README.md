@@ -24,7 +24,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/IndrajeetPatil/groupe
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2020--03--17-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2020--03--24-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
@@ -162,9 +162,6 @@ groupedstats::grouped_tidy(
   formula = Survived ~ Sex,
   family = stats::binomial(link = "logit")
 )
-#> Registered S3 method overwritten by 'broom.mixed':
-#>   method      from 
-#>   tidy.gamlss broom
 #> # A tibble: 14 x 7
 #>    Class Age   term         estimate  std.error statistic  p.value
 #>    <fct> <fct> <chr>           <dbl>      <dbl>     <dbl>    <dbl>
@@ -208,25 +205,29 @@ groupedstats::grouped_summary(
   measures = sleep_total:awake,
   measures.type = "numeric"
 )
-#> # A tibble: 16 x 16
-#>    vore    skim_type skim_variable missing complete   mean     sd   min    p25
-#>    <fct>   <chr>     <chr>           <int>    <dbl>  <dbl>  <dbl> <dbl>  <dbl>
-#>  1 carni   numeric   sleep_total         0    1     10.4   4.67   2.7    6.25 
-#>  2 carni   numeric   sleep_rem           9    0.526  2.29  1.86   0.1    1.33 
-#>  3 carni   numeric   sleep_cycle        14    0.263  0.373 0.0325 0.333  0.35 
-#>  4 carni   numeric   awake               0    1     13.6   4.68   4.6   11    
-#>  5 herbi   numeric   sleep_total         0    1      9.51  4.88   1.9    4.3  
-#>  6 herbi   numeric   sleep_rem           8    0.75   1.37  0.922  0.4    0.6  
-#>  7 herbi   numeric   sleep_cycle        20    0.375  0.418 0.324  0.117  0.183
-#>  8 herbi   numeric   awake               0    1     14.5   4.88   7.4    9.78 
-#>  9 insecti numeric   sleep_total         0    1     14.9   5.92   8.4    8.6  
-#> 10 insecti numeric   sleep_rem           1    0.8    3.52  1.93   2      2.08 
-#> 11 insecti numeric   sleep_cycle         2    0.6    0.161 0.0419 0.117  0.142
-#> 12 insecti numeric   awake               0    1      9.06  5.92   4.1    4.3  
-#> 13 omni    numeric   sleep_total         0    1     10.9   2.95   8      9.1  
-#> 14 omni    numeric   sleep_rem           2    0.9    1.96  1.01   0.7    1.25 
-#> 15 omni    numeric   sleep_cycle         9    0.55   0.592 0.473  0.133  0.258
-#> 16 omni    numeric   awake               0    1     13.1   2.95   6     13.1  
+#> # A tibble: 20 x 16
+#>    vore    skim_type skim_variable missing complete   mean      sd    min    p25
+#>    <fct>   <chr>     <chr>           <int>    <dbl>  <dbl>   <dbl>  <dbl>  <dbl>
+#>  1 carni   numeric   sleep_total         0    1     10.4    4.67    2.7    6.25 
+#>  2 carni   numeric   sleep_rem           9    0.526  2.29   1.86    0.1    1.33 
+#>  3 carni   numeric   sleep_cycle        14    0.263  0.373  0.0325  0.333  0.35 
+#>  4 carni   numeric   awake               0    1     13.6    4.68    4.6   11    
+#>  5 herbi   numeric   sleep_total         0    1      9.51   4.88    1.9    4.3  
+#>  6 herbi   numeric   sleep_rem           8    0.75   1.37   0.922   0.4    0.6  
+#>  7 herbi   numeric   sleep_cycle        20    0.375  0.418  0.324   0.117  0.183
+#>  8 herbi   numeric   awake               0    1     14.5    4.88    7.4    9.78 
+#>  9 insecti numeric   sleep_total         0    1     14.9    5.92    8.4    8.6  
+#> 10 insecti numeric   sleep_rem           1    0.8    3.52   1.93    2      2.08 
+#> 11 insecti numeric   sleep_cycle         2    0.6    0.161  0.0419  0.117  0.142
+#> 12 insecti numeric   awake               0    1      9.06   5.92    4.1    4.3  
+#> 13 omni    numeric   sleep_total         0    1     10.9    2.95    8      9.1  
+#> 14 omni    numeric   sleep_rem           2    0.9    1.96   1.01    0.7    1.25 
+#> 15 omni    numeric   sleep_cycle         9    0.55   0.592  0.473   0.133  0.258
+#> 16 omni    numeric   awake               0    1     13.1    2.95    6     13.1  
+#> 17 <NA>    numeric   sleep_total         0    1     10.2    3.00    5.4    8.65 
+#> 18 <NA>    numeric   sleep_rem           2    0.714  1.88   0.847   0.5    1.8  
+#> 19 <NA>    numeric   sleep_cycle         6    0.143  0.183 NA       0.183  0.183
+#> 20 <NA>    numeric   awake               0    1     13.8    3.00   10.3   11.8  
 #>    median    p75    max     n std.error mean.conf.low mean.conf.high
 #>     <dbl>  <dbl>  <dbl> <int>     <dbl>         <dbl>          <dbl>
 #>  1 10.4   13     19.4      19    1.07          8.13           12.6  
@@ -244,7 +245,11 @@ groupedstats::grouped_summary(
 #> 13  9.9   10.9   18        20    0.659         9.54           12.3  
 #> 14  1.85   2.3    4.9      18    0.239         1.45            2.46 
 #> 15  0.5    0.708  1.5      11    0.143         0.274           0.911
-#> 16 14.1   14.9   16        20    0.659        11.7            14.5
+#> 16 14.1   14.9   16        20    0.659        11.7            14.5  
+#> 17 10.6   12.2   13.7       7    1.14          7.41           13.0  
+#> 18  2      2.4    2.7       5    0.379         0.829           2.93 
+#> 19  0.183  0.183  0.183     1   NA           NaN             NaN    
+#> 20 13.4   15.4   18.6       7    1.14         11.0            16.6
 ```
 
 This function can be used to get summary of either numeric **or** factor
@@ -353,12 +358,6 @@ ggplot2::ggplot(
   ggplot2::facet_grid(facets = ~cut) + # for each level of the factor level
   ggstatsplot::theme_ggstatsplot() +
   ggplot2::theme(legend.position = "none")
-#> Registered S3 methods overwritten by 'car':
-#>   method                          from
-#>   influence.merMod                lme4
-#>   cooks.distance.influence.merMod lme4
-#>   dfbeta.influence.merMod         lme4
-#>   dfbetas.influence.merMod        lme4
 ```
 
 <img src="man/figures/README-grouped_summary3-1.png" width="100%" />
@@ -536,14 +535,6 @@ cut-
 set.seed(123)
 library(ggplot2)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 options(tibble.width = Inf) # show me all columns
 
 groupedstats::grouped_slr(
@@ -735,8 +726,6 @@ groupedstats::grouped_aov(
   formula = lifeExp ~ continent,
   output = "tukey"
 )
-#> Note: The p-value is adjusted for the number of tests conducted
-#>             at each level of the grouping variable.
 #> # A tibble: 120 x 8
 #>     year term      comparison       estimate conf.low conf.high adj.p.value
 #>    <int> <chr>     <chr>               <dbl>    <dbl>     <dbl>       <dbl>
@@ -849,56 +838,33 @@ groupedstats::grouped_lmer(
   data = gapminder,
   formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
   grouping.vars = year,
-  REML = FALSE,
   output = "tidy"
 )
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
 #> # A tibble: 24 x 10
 #>     year effect term             estimate std.error statistic conf.low conf.high
 #>    <int> <chr>  <chr>               <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-#>  1  1952 fixed  (Intercept)         0.201    0.743      0.270  -1.26       1.66 
-#>  2  1952 fixed  scale(gdpPercap)    0.900    0.742      1.21   -0.555      2.35 
-#>  3  1957 fixed  (Intercept)         0.207    0.380      0.545  -0.538      0.952
-#>  4  1957 fixed  scale(gdpPercap)    0.424    0.261      1.62   -0.0878     0.936
-#>  5  1962 fixed  (Intercept)         0.226    0.505      0.447  -0.765      1.22 
-#>  6  1962 fixed  scale(gdpPercap)    0.547    0.273      2.01    0.0130     1.08 
-#>  7  1967 fixed  (Intercept)         0.233    0.308      0.757  -0.370      0.836
-#>  8  1967 fixed  scale(gdpPercap)    0.271    0.0792     3.42    0.115      0.426
-#>  9  1972 fixed  (Intercept)         0.268    0.312      0.859  -0.344      0.881
-#> 10  1972 fixed  scale(gdpPercap)    0.236    0.0582     4.05    0.122      0.350
-#>      p.value significance
-#>        <dbl> <chr>       
-#>  1 0.787     ns          
-#>  2 0.225     ns          
-#>  3 0.586     ns          
-#>  4 0.104     ns          
-#>  5 0.655     ns          
-#>  6 0.0447    *           
-#>  7 0.449     ns          
-#>  8 0.000632  ***         
-#>  9 0.390     ns          
-#> 10 0.0000502 ***         
+#>  1  1952 fixed  (Intercept)         0.260    0.487      0.534  -0.694      1.21 
+#>  2  1952 fixed  scale(gdpPercap)    0.966    0.409      2.36    0.164      1.77 
+#>  3  1957 fixed  (Intercept)         0.252    0.441      0.573  -0.612      1.12 
+#>  4  1957 fixed  scale(gdpPercap)    0.839    0.355      2.36    0.143      1.53 
+#>  5  1962 fixed  (Intercept)         0.244    0.491      0.497  -0.719      1.21 
+#>  6  1962 fixed  scale(gdpPercap)    0.553    0.233      2.37    0.0965     1.01 
+#>  7  1967 fixed  (Intercept)         0.234    0.342      0.683  -0.437      0.904
+#>  8  1967 fixed  scale(gdpPercap)    0.296    0.0919     3.22    0.116      0.476
+#>  9  1972 fixed  (Intercept)         0.260    0.345      0.753  -0.417      0.936
+#> 10  1972 fixed  scale(gdpPercap)    0.250    0.0694     3.60    0.114      0.386
+#>     p.value significance
+#>       <dbl> <chr>       
+#>  1 0.593    ns          
+#>  2 0.0182   *           
+#>  3 0.567    ns          
+#>  4 0.0180   *           
+#>  5 0.619    ns          
+#>  6 0.0176   *           
+#>  7 0.494    ns          
+#>  8 0.00128  **          
+#>  9 0.452    ns          
+#> 10 0.000321 ***         
 #> # ... with 14 more rows
 
 # getting tidy output of results
@@ -906,35 +872,23 @@ groupedstats::grouped_lmer(
   data = gapminder,
   formula = scale(lifeExp) ~ scale(gdpPercap) + (gdpPercap | continent),
   grouping.vars = year,
-  REML = FALSE,
   output = "glance"
 )
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
-#> boundary (singular) fit: see ?isSingular
 #> # A tibble: 12 x 7
-#>     year sigma logLik   AIC   BIC deviance df.residual
+#>     year sigma logLik   AIC   BIC REMLcrit df.residual
 #>    <int> <dbl>  <dbl> <dbl> <dbl>    <dbl>       <int>
-#>  1  1952 0.524  -127.  266.  283.     254.         136
-#>  2  1957 0.557  -129.  270.  287.     258.         136
-#>  3  1962 0.545  -129.  271.  288.     259.         136
-#>  4  1967 0.565  -129.  270.  288.     258.         136
-#>  5  1972 0.583  -133.  278.  296.     266.         136
-#>  6  1977 0.579  -133.  277.  295.     265.         136
-#>  7  1982 0.535  -122.  255.  273.     243.         136
-#>  8  1987 0.496  -111.  233.  251.     221.         136
-#>  9  1992 0.526  -117.  246.  264.     234.         136
-#> 10  1997 0.494  -110.  232.  250.     220.         136
-#> 11  2002 0.506  -113.  239.  257.     227.         136
-#> 12  2007 0.520  -117.  247.  265.     235.         136
+#>  1  1952 0.527  -125.  263.  280.     251.         136
+#>  2  1957 0.539  -128.  268.  285.     256.         136
+#>  3  1962 0.547  -129.  271.  289.     259.         136
+#>  4  1967 0.565  -131.  274.  292.     262.         136
+#>  5  1972 0.585  -135.  283.  300.     271.         136
+#>  6  1977 0.585  -135.  281.  299.     269.         136
+#>  7  1982 0.538  -124.  260.  277.     248.         136
+#>  8  1987 0.502  -112.  236.  254.     224.         136
+#>  9  1992 0.526  -119.  251.  268.     239.         136
+#> 10  1997 0.500  -112.  236.  254.     224.         136
+#> 11  2002 0.509  -116.  243.  261.     231.         136
+#> 12  2007 0.524  -120.  251.  269.     239.         136
 ```
 
 ## `grouped_glmer`
@@ -950,8 +904,8 @@ set.seed(123)
 
 # having a look at the data
 dplyr::glimpse(groupedstats::Titanic_full)
-#> Observations: 2,201
-#> Variables: 5
+#> Rows: 2,201
+#> Columns: 5
 #> $ id       <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,...
 #> $ Class    <fct> 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd, 3rd...
 #> $ Sex      <fct> Male, Male, Male, Male, Male, Male, Male, Male, Male, Male...
@@ -995,7 +949,6 @@ groupedstats::grouped_glmer(
   family = stats::binomial(link = "probit"),
   output = "glance"
 )
-#> boundary (singular) fit: see ?isSingular
 #> # A tibble: 2 x 7
 #>   Sex    sigma logLik   AIC   BIC deviance df.residual
 #>   <fct>  <dbl>  <dbl> <dbl> <dbl>    <dbl>       <int>
@@ -1173,7 +1126,7 @@ diamonds_short <-
   dplyr::filter(.data = ggplot2::diamonds, color == "E" | color == "J")
 
 # show me all rows and columns
-options(tibble.width = Inf, tibble.print_max = Inf) 
+options(tibble.width = Inf, tibble.print_max = Inf)
 
 # t-test
 groupedstats::grouped_ttest(
@@ -1367,11 +1320,12 @@ results_df <-
     .id = "model"
   ) %>% # for each combination of mpaa rating and movie genre
   dplyr::group_by(.data = ., mpaa, genre) %>% # arrange by best to worst fits
-  dplyr::arrange(.data = ., dplyr::desc(adj.r.squared))
+  dplyr::arrange(.data = ., dplyr::desc(adj.r.squared)) %>%
+  dplyr::ungroup(.)
 
+# looking at the results
 head(results_df)
 #> # A tibble: 6 x 15
-#> # Groups:   mpaa, genre [3]
 #>   model mpaa  genre       r.squared adj.r.squared  sigma statistic      p.value
 #>   <chr> <fct> <fct>           <dbl>         <dbl>  <dbl>     <dbl>        <dbl>
 #> 1 2     PG-13 Animation       0.474         0.369 0.824       4.51 0.0870      
