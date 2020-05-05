@@ -1,10 +1,10 @@
-6fa8f34b0dceb88170db6c1a3718d8a4 *DESCRIPTION
+e18dde078f744075b8f58cbd6d15420b *DESCRIPTION
 3c34afdc3adf82d2448f12715a255122 *LICENSE
-bafa6d0722f3b8fe807f587b5b8a2646 *NAMESPACE
-0de7d50f551fe16f902a4e86f193b9e4 *NEWS.md
+262da2c7f7374221879c5026b141107b *NAMESPACE
+4cd645592968f8d71f8a6b0a1c369587 *NEWS.md
 e9a1f1c8dd880087e67c44047f0b3891 *R/data.R
 e6d62b1882771a1a1aa3cdb3ffc324c8 *R/global_vars.R
-a82970b5309b7936d696f27bc9f3b610 *R/grouped_aov.R
+532ff1854fdad4f2d52556852d9f9137 *R/grouped_aov.R
 c61edd394fab6252d78524ce3c6f7f99 *R/grouped_glm.R
 eebef8a555217d8223ac1e8c0640664e *R/grouped_glmer.R
 09152f36a58b8326ac958ac46399690e *R/grouped_lm.R
@@ -16,9 +16,9 @@ f624453c3d854cf9cac6455c5a0ec1cf *R/grouped_summary.R
 bd90d3b7dbd23fb0022f0b8f2e1f2a7b *R/grouped_ttest.R
 a31a64c5de341ee2d2f22a38c5fdba4e *R/grouped_wilcox.R
 5bc6d7f74dc643a355ae6e3ed3942591 *R/groupedstats-package.R
-60e5a78700932adbb3c81fa0815a19c7 *R/lm_effsize_ci.R
+028b17352d962f82ac638f0ddc01b937 *R/lm_effsize_ci.R
 e90f3c568e21e640a36b133df5be9d87 *R/reexports.R
-e6558abee1418a06836765a96f6bf1a4 *README.md
+be989930e7f419c3c067b6577cf68050 *README.md
 9b67b61c20e069a3cee685ed50b6fa22 *data/Titanic_full.rdata
 089a11d33f728d3cf1c89dcee9192cd8 *data/intent_morality.rdata
 8e3f09fa1038b8211b370eab9c110926 *data/movies_long.rdata
@@ -26,8 +26,8 @@ e6558abee1418a06836765a96f6bf1a4 *README.md
 47a9e3c56ae422ebb498aebb38b4fec1 *inst/CITATION
 1c6c4da369398a567bf806fca18af9e5 *inst/WORDLIST
 7f3cbe89e477993492681a4987da8689 *man/Titanic_full.Rd
-2f0874e4ad3dcefc019a6139e2fd227b *man/figures/README-grouped_summary3-1.png
-9da31a1bacf3ba76e86f6e6ab6452600 *man/grouped_aov.Rd
+a5b3cdd360b358bf9355fb00279ea4f3 *man/figures/README-grouped_summary3-1.png
+d7410901838e5dd7fa4887a9cbec549e *man/grouped_aov.Rd
 ce2bfa7f9738c40477d1096d74afb67b *man/grouped_glm.Rd
 34afadfbb8da61a4883b24780c2104cd *man/grouped_glmer.Rd
 5acec54ce76da3ed62b60b5806f4dc25 *man/grouped_lm.Rd
@@ -40,8 +40,8 @@ bf63842af0572b91eb6096b5b9a1b718 *man/grouped_slr.Rd
 76f58f34e2c62cbb3d25cec81e4def28 *man/grouped_wilcox.Rd
 816ad0fcb3f2f50f742d1ea093e3d395 *man/groupedstats-package.Rd
 66606e5bb4468043159d533d433a5892 *man/intent_morality.Rd
-f72e37bac7305e6c3fd5c9c370f406c8 *man/lm_effsize_ci.Rd
-5d8adb27dbb7e131ae5b3ddef48eed77 *man/lm_effsize_standardizer.Rd
+a4ce510c47a76025d089697854fe7625 *man/lm_effsize_ci.Rd
+a40dfdd52959083b3d60622d665152e7 *man/lm_effsize_standardizer.Rd
 982f1bef6570c7557df93bafaa76b0fa *man/movies_long.Rd
 9d1c88ad3fdeb9ff905cfe42db80b636 *man/movies_wide.Rd
 5008df856f267adff48ecb9da9511fcc *man/reexports.Rd
@@ -54,5 +54,5 @@ e82a20e96bf64429c72ea686524fb223 *tests/testthat/test-grouped_lm.R
 bdeda36c7b6efb15151b1c59a975c5a0 *tests/testthat/test-grouped_lmer.R
 22a86561ca58ff3f9299afc9d00207b0 *tests/testthat/test-grouped_p_value.R
 f9f4e8da078b23ce55cfeff2824778f1 *tests/testthat/test-grouped_proptest.R
-ab5b2732d4a1846e1f9249ab3cd5a05e *tests/testthat/test-grouped_summary.R
-4ec87b99480f0cd469da4baa4fd8971f *tests/testthat/test-lm_effsize_ci.R
+80766a65ff71979649ef9e4dd9057940 *tests/testthat/test-grouped_summary.R
+61bfc5bc7f6fa3f6a23f226db7088142 *tests/testthat/test-lm_effsize_ci.R
