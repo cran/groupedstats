@@ -1,7 +1,6 @@
-#' @title Function to run generalized linear model (glm) across multiple
+#' @title Function to run generalized linear model (`glm`) across multiple
 #'   grouping variables.
 #' @name grouped_glm
-#' @author Indrajeet Patil
 #' @return A tibble dataframe with tidy results from linear model.
 #'
 #' @inheritParams grouped_lm
@@ -13,22 +12,11 @@
 #' \code{\link{grouped_glmer}}
 #'
 #' @examples
-#'
-#' # to get tidy output
 #' groupedstats::grouped_glm(
-#'   data = groupedstats::Titanic_full,
-#'   formula = Survived ~ Sex,
-#'   grouping.vars = Class,
+#'   data = mtcars,
+#'   formula = am ~ wt,
+#'   grouping.vars = cyl,
 #'   family = stats::binomial(link = "logit")
-#' )
-#'
-#' # to get glance output
-#' groupedstats::grouped_glm(
-#'   data = groupedstats::Titanic_full,
-#'   formula = Survived ~ Sex,
-#'   grouping.vars = Class,
-#'   family = stats::binomial(link = "logit"),
-#'   output = "glance"
 #' )
 #' @export
 
@@ -40,13 +28,14 @@ grouped_glm <- function(data,
                         augment.args = list()) {
   if (output == "tidy") {
     # tidy results
-    combined_df <- broomExtra::grouped_tidy(
-      data = data,
-      grouping.vars = {{ grouping.vars }},
-      ..f = stats::glm,
-      ...,
-      tidy.args = tidy.args
-    )
+    combined_df <-
+      broomExtra::grouped_tidy(
+        data = data,
+        grouping.vars = {{ grouping.vars }},
+        ..f = stats::glm,
+        ...,
+        tidy.args = tidy.args
+      )
 
     # add a column with significance labels if p-values are present
     if ("p.value" %in% names(combined_df)) {
@@ -56,23 +45,25 @@ grouped_glm <- function(data,
 
   if (output == "glance") {
     # tidy results
-    combined_df <- broomExtra::grouped_glance(
-      data = data,
-      grouping.vars = {{ grouping.vars }},
-      ..f = stats::glm,
-      ...
-    )
+    combined_df <-
+      broomExtra::grouped_glance(
+        data = data,
+        grouping.vars = {{ grouping.vars }},
+        ..f = stats::glm,
+        ...
+      )
   }
 
   if (output == "augment") {
     # tidy results
-    combined_df <- broomExtra::grouped_augment(
-      data = data,
-      grouping.vars = {{ grouping.vars }},
-      ..f = stats::glm,
-      ...,
-      augment.args = augment.args
-    )
+    combined_df <-
+      broomExtra::grouped_augment(
+        data = data,
+        grouping.vars = {{ grouping.vars }},
+        ..f = stats::glm,
+        ...,
+        augment.args = augment.args
+      )
   }
 
   return(combined_df)

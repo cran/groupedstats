@@ -2,8 +2,8 @@
 % Please edit documentation in R/grouped_glmer.R
 \name{grouped_glmer}
 \alias{grouped_glmer}
-\title{Function to run generalized linear mixed-effects model (glmer) across
-multiple grouping variables.}
+\title{Function to run generalized linear mixed-effects model (\code{glmer})
+across multiple grouping variables.}
 \usage{
 grouped_glmer(
   data,
@@ -108,26 +108,6 @@ A tibble dataframe with tidy results from linear model or model
 summaries.
 }
 \description{
-Function to run generalized linear mixed-effects model (glmer) across
-multiple grouping variables.
-}
-\examples{
-
-# for reproducibility
-set.seed(123)
-
-# categorical outcome; binomial family
-groupedstats::grouped_glmer(
-  formula = Survived ~ Age + (Age | Class),
-  family = stats::binomial(link = "probit"),
-  data = dplyr::sample_frac(groupedstats::Titanic_full, size = 0.3),
-  grouping.vars = Sex,
-  tidy.args = list(effects = "fixed", conf.int = TRUE, conf.level = 0.95)
-)
-}
-\seealso{
-grouped_lmer
-}
-\author{
-Indrajeet Patil
+Function to run generalized linear mixed-effects model (\code{glmer})
+across multiple grouping variables.
 }

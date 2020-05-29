@@ -6,7 +6,7 @@
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/groupedstats)](https://CRAN.R-project.org/package=groupedstats)
 [![CRAN
 Checks](https://cranchecks.info/badges/summary/groupedstats)](https://cran.r-project.org/web/checks/check_results_groupedstats.html)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.1.9000-orange.svg?style=flat-square)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-1.0.1.9000-orange.svg?style=flat-square)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
 [![Daily downloads
 badge](https://cranlogs.r-pkg.org/badges/last-day/groupedstats?color=blue)](https://CRAN.R-project.org/package=groupedstats)
 [![Weekly downloads
@@ -24,14 +24,10 @@ Status](https://ci.appveyor.com/api/projects/status/github/IndrajeetPatil/groupe
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2020--05--05-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2020--05--25-yellowgreen.svg)](https://github.com/IndrajeetPatil/groupedstats/commits/master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/IndrajeetPatil/groupedstats/master.svg)](https://codecov.io/github/IndrajeetPatil/groupedstats?branch=master)
-[![Coverage
-Status](https://coveralls.io/repos/github/IndrajeetPatil/groupedstats/badge.svg?branch=master)](https://coveralls.io/github/IndrajeetPatil/groupedstats?branch=master)
 [![status](https://tinyverse.netlify.com/badge/groupedstats)](https://CRAN.R-project.org/package=groupedstats)
 
 # Retirement
@@ -154,7 +150,7 @@ set.seed(123)
 
 # running glm across two all combinations of two grouping variables
 groupedstats::grouped_tidy(
-  data = groupedstats::Titanic_full, # dataframe
+  data = ggstatsplot::Titanic_full, # dataframe
   grouping.vars = c(Class, Age), # grouping variables
   ..f = stats::glm, # function to execute
   # additional arguments passed to `..f`
@@ -205,50 +201,50 @@ groupedstats::grouped_summary(
   measures.type = "numeric"
 )
 #> # A tibble: 20 x 16
-#>    vore    skim_type skim_variable missing complete   mean       sd    min
-#>    <fct>   <chr>     <chr>           <int>    <dbl>  <dbl>    <dbl>  <dbl>
-#>  1 carni   numeric   sleep_total         0    1     10.4     4.67    2.7  
-#>  2 carni   numeric   sleep_rem           9    0.526  2.29    1.86    0.1  
-#>  3 carni   numeric   sleep_cycle        14    0.263  0.373   0.0325  0.333
-#>  4 carni   numeric   awake               0    1     13.6     4.68    4.6  
-#>  5 herbi   numeric   sleep_total         0    1      9.51    4.88    1.9  
-#>  6 herbi   numeric   sleep_rem           8    0.75   1.37    0.922   0.4  
-#>  7 herbi   numeric   sleep_cycle        20    0.375  0.418   0.324   0.117
-#>  8 herbi   numeric   awake               0    1     14.5     4.88    7.4  
-#>  9 insecti numeric   sleep_total         0    1     14.9     5.92    8.4  
-#> 10 insecti numeric   sleep_rem           1    0.8    3.52    1.93    2    
-#> 11 insecti numeric   sleep_cycle         2    0.6    0.161   0.0419  0.117
-#> 12 insecti numeric   awake               0    1      9.06    5.92    4.1  
-#> 13 omni    numeric   sleep_total         0    1     10.9     2.95    8    
-#> 14 omni    numeric   sleep_rem           2    0.9    1.96    1.01    0.7  
-#> 15 omni    numeric   sleep_cycle         9    0.55   0.592   0.473   0.133
-#> 16 omni    numeric   awake               0    1     13.1     2.95    6    
-#> 17 <NA>    numeric   sleep_total         0    1     10.2     3.00    5.4  
-#> 18 <NA>    numeric   sleep_rem           2    0.714  1.88    0.847   0.5  
-#> 19 <NA>    numeric   sleep_cycle         6    0.143  0.183 NaN       0.183
-#> 20 <NA>    numeric   awake               0    1     13.8     3.00   10.3  
-#>       p25 median    p75    max     n std.error mean.conf.low mean.conf.high
-#>     <dbl>  <dbl>  <dbl>  <dbl> <int>     <dbl>         <dbl>          <dbl>
-#>  1  6.25  10.4   13     19.4      19    1.07          8.13           12.6  
-#>  2  1.33   1.95   3.05   6.6      10    0.589         0.958           3.62 
-#>  3  0.35   0.383  0.383  0.417     5    0.0145        0.333           0.414
-#>  4 11     13.6   17.8   21.4      19    1.07         11.4            15.9  
-#>  5  4.3   10.3   14.2   16.6      32    0.862         7.75           11.3  
-#>  6  0.6    0.95   1.98   3.4      24    0.188         0.977           1.76 
-#>  7  0.183  0.217  0.692  1        12    0.0936        0.212           0.624
-#>  8  9.78  13.7   19.7   22.1      32    0.862        12.7            16.2  
-#>  9  8.6   18.1   19.7   19.9       5    2.65          7.59           22.3  
-#> 10  2.08   3      4.45   6.1       4    0.963         0.460           6.59 
-#> 11  0.142  0.167  0.183  0.2       3    0.0242        0.0569          0.265
-#> 12  4.3    5.9   15.4   15.6       5    2.65          1.71           16.4  
-#> 13  9.1    9.9   10.9   18        20    0.659         9.54           12.3  
-#> 14  1.25   1.85   2.3    4.9      18    0.239         1.45            2.46 
-#> 15  0.258  0.5    0.708  1.5      11    0.143         0.274           0.911
-#> 16 13.1   14.1   14.9   16        20    0.659        11.7            14.5  
-#> 17  8.65  10.6   12.2   13.7       7    1.14          7.41           13.0  
-#> 18  1.8    2      2.4    2.7       5    0.379         0.829           2.93 
-#> 19  0.183  0.183  0.183  0.183     1  NaN           NaN             NaN    
-#> 20 11.8   13.4   15.4   18.6       7    1.14         11.0            16.6
+#>    vore    skim_type skim_variable missing complete   mean      sd    min    p25
+#>    <fct>   <chr>     <chr>           <int>    <dbl>  <dbl>   <dbl>  <dbl>  <dbl>
+#>  1 carni   numeric   sleep_total         0    1     10.4    4.67    2.7    6.25 
+#>  2 carni   numeric   sleep_rem           9    0.526  2.29   1.86    0.1    1.33 
+#>  3 carni   numeric   sleep_cycle        14    0.263  0.373  0.0325  0.333  0.35 
+#>  4 carni   numeric   awake               0    1     13.6    4.68    4.6   11    
+#>  5 herbi   numeric   sleep_total         0    1      9.51   4.88    1.9    4.3  
+#>  6 herbi   numeric   sleep_rem           8    0.75   1.37   0.922   0.4    0.6  
+#>  7 herbi   numeric   sleep_cycle        20    0.375  0.418  0.324   0.117  0.183
+#>  8 herbi   numeric   awake               0    1     14.5    4.88    7.4    9.78 
+#>  9 insecti numeric   sleep_total         0    1     14.9    5.92    8.4    8.6  
+#> 10 insecti numeric   sleep_rem           1    0.8    3.52   1.93    2      2.08 
+#> 11 insecti numeric   sleep_cycle         2    0.6    0.161  0.0419  0.117  0.142
+#> 12 insecti numeric   awake               0    1      9.06   5.92    4.1    4.3  
+#> 13 omni    numeric   sleep_total         0    1     10.9    2.95    8      9.1  
+#> 14 omni    numeric   sleep_rem           2    0.9    1.96   1.01    0.7    1.25 
+#> 15 omni    numeric   sleep_cycle         9    0.55   0.592  0.473   0.133  0.258
+#> 16 omni    numeric   awake               0    1     13.1    2.95    6     13.1  
+#> 17 <NA>    numeric   sleep_total         0    1     10.2    3.00    5.4    8.65 
+#> 18 <NA>    numeric   sleep_rem           2    0.714  1.88   0.847   0.5    1.8  
+#> 19 <NA>    numeric   sleep_cycle         6    0.143  0.183 NA       0.183  0.183
+#> 20 <NA>    numeric   awake               0    1     13.8    3.00   10.3   11.8  
+#>    median    p75    max     n std.error mean.conf.low mean.conf.high
+#>     <dbl>  <dbl>  <dbl> <int>     <dbl>         <dbl>          <dbl>
+#>  1 10.4   13     19.4      19    1.07          8.13           12.6  
+#>  2  1.95   3.05   6.6      10    0.589         0.958           3.62 
+#>  3  0.383  0.383  0.417     5    0.0145        0.333           0.414
+#>  4 13.6   17.8   21.4      19    1.07         11.4            15.9  
+#>  5 10.3   14.2   16.6      32    0.862         7.75           11.3  
+#>  6  0.95   1.98   3.4      24    0.188         0.977           1.76 
+#>  7  0.217  0.692  1        12    0.0936        0.212           0.624
+#>  8 13.7   19.7   22.1      32    0.862        12.7            16.2  
+#>  9 18.1   19.7   19.9       5    2.65          7.59           22.3  
+#> 10  3      4.45   6.1       4    0.963         0.460           6.59 
+#> 11  0.167  0.183  0.2       3    0.0242        0.0569          0.265
+#> 12  5.9   15.4   15.6       5    2.65          1.71           16.4  
+#> 13  9.9   10.9   18        20    0.659         9.54           12.3  
+#> 14  1.85   2.3    4.9      18    0.239         1.45            2.46 
+#> 15  0.5    0.708  1.5      11    0.143         0.274           0.911
+#> 16 14.1   14.9   16        20    0.659        11.7            14.5  
+#> 17 10.6   12.2   13.7       7    1.14          7.41           13.0  
+#> 18  2      2.4    2.7       5    0.379         0.829           2.93 
+#> 19  0.183  0.183  0.183     1   NA           NaN             NaN    
+#> 20 13.4   15.4   18.6       7    1.14         11.0            16.6
 ```
 
 This function can be used to get summary of either numeric **or** factor
@@ -902,7 +898,7 @@ survived the Titanic tragedy.
 set.seed(123)
 
 # having a look at the data
-dplyr::glimpse(groupedstats::Titanic_full)
+dplyr::glimpse(ggstatsplot::Titanic_full)
 #> Rows: 2,201
 #> Columns: 5
 #> $ id       <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,...
@@ -914,7 +910,7 @@ dplyr::glimpse(groupedstats::Titanic_full)
 # running glmer model to get tidy output
 groupedstats::grouped_glmer(
   formula = Survived ~ Age + (Age | Class),
-  data = groupedstats::Titanic_full,
+  data = ggstatsplot::Titanic_full,
   family = stats::binomial(link = "probit"), # choosing the appropriate GLM family
   control = lme4::glmerControl( # choosing appropriate control
     optimizer = "Nelder_Mead",
@@ -942,7 +938,7 @@ groupedstats::grouped_glmer(
 
 # getting glmer model summaries (let's use the default family and control values)
 groupedstats::grouped_glmer(
-  data = groupedstats::Titanic_full,
+  data = ggstatsplot::Titanic_full,
   grouping.vars = Sex,
   formula = Survived ~ Age + (Age | Class),
   family = stats::binomial(link = "probit"),
@@ -1305,7 +1301,7 @@ library(groupedstats)
 results_df <-
   purrr::pmap_dfr(
     .l = list(
-      data = list(groupedstats::movies_long),
+      data = list(ggstatsplot::movies_long),
       grouping.vars = alist(c(mpaa, genre)), # note it's `alist` and not `list`
       formula = list(
         rating ~ budget, # model 1
@@ -1325,29 +1321,23 @@ results_df <-
 # looking at the results
 head(results_df)
 #> # A tibble: 6 x 15
-#>   model mpaa  genre       r.squared adj.r.squared  sigma statistic      p.value
-#>   <chr> <fct> <fct>           <dbl>         <dbl>  <dbl>     <dbl>        <dbl>
-#> 1 2     PG-13 Animation       0.474         0.369 0.824       4.51 0.0870      
-#> 2 4     PG-13 Animation       0.447         0.337 0.138       4.05 0.100       
-#> 3 3     PG    Documentary     0.468         0.202 0.0532      1.76 0.316       
-#> 4 1     PG    Documentary     0.449         0.174 0.386       1.63 0.330       
-#> 5 4     R     Action          0.142         0.138 0.254      34.6  0.0000000162
-#> 6 2     R     Action          0.129         0.125 1.31       30.9  0.0000000825
-#>      df   logLik    AIC    BIC  deviance df.residual  nobs
-#>   <dbl>    <dbl>  <dbl>  <dbl>     <dbl>       <int> <int>
-#> 1     1   -7.40   20.8   20.6    3.39              5     7
-#> 2     1    5.09   -4.18  -4.35   0.0957            5     7
-#> 3     1    7.45   -8.90 -10.7    0.00565           2     4
-#> 4     1   -0.479   6.96   5.12   0.298             2     4
-#> 5     1   -9.39   24.8   34.8   13.5             209   211
-#> 6     1 -356.    718.   728.   361.              209   211
+#>   model mpaa  genre        r.squared adj.r.squared sigma statistic    p.value
+#>   <chr> <fct> <fct>            <dbl>         <dbl> <dbl>     <dbl>      <dbl>
+#> 1 4     R     Action Drama     0.252         0.242 0.194     26.6  0.00000183
+#> 2 4     PG    Animated         0.256         0.230 0.177      9.64 0.00432   
+#> 3 2     PG-13 Animated         0.377         0.221 0.919      2.42 0.195     
+#> 4 4     PG-13 Animated         0.359         0.199 0.155      2.24 0.209     
+#> 5 2     PG    Animated         0.220         0.192 1.04       7.88 0.00900   
+#> 6 2     R     Action Drama     0.195         0.185 1.13      19.2  0.0000366 
+#>      df  logLik    AIC    BIC deviance df.residual  nobs
+#>   <dbl>   <dbl>  <dbl>  <dbl>    <dbl>       <int> <int>
+#> 1     1   18.8  -31.5  -24.3    2.99            79    81
+#> 2     1   10.4  -14.9  -10.7    0.876           28    30
+#> 3     1   -6.79  19.6   19.0    3.38             4     6
+#> 4     1    3.91  -1.82  -2.44   0.0955           4     6
+#> 5     1  -42.8   91.5   95.7   30.4             28    30
+#> 6     1 -124.   254.   261.   102.              79    81
 ```
-
-# Current code coverage
-
-As the code stands right now, here is the code coverage for all primary
-functions involved:
-<https://codecov.io/gh/IndrajeetPatil/groupedstats/tree/master/R>
 
 # Contributing
 

@@ -1,7 +1,6 @@
 #' @title Linear mixed-effects model (`lmer`) across multiple grouping
 #'   variables.
 #' @name grouped_lmer
-#' @author Indrajeet Patil
 #' @return A tibble dataframe with tidy results from a linear mixed-effects
 #'   model. Note that *p*-value is computed using `parameters::p_value`.
 #'
@@ -9,15 +8,8 @@
 #' @inheritDotParams lme4::lmer
 #' @inheritParams parameters::p_value
 #'
-#' @importFrom purrr map
-#' @importFrom lme4 lmer
-#' @importFrom parameters p_value
-#' @importFrom stats as.formula
-#' @importFrom tidyr nest
-#' @importFrom rlang !! enquos enquo quo quo_squash
-#' @importFrom dplyr select group_by arrange mutate mutate_at
 #' @importFrom dplyr left_join
-#' @importFrom broomExtra tidy glance augment
+#' @importFrom broomExtra grouped_tidy grouped_glance grouped_augment
 #'
 #' @examples
 #' \donttest{
@@ -25,7 +17,6 @@
 #' set.seed(123)
 #'
 #' # loading libraries containing data
-#' library(ggplot2)
 #' library(gapminder)
 #'
 #' # getting tidy output of results

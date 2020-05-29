@@ -1,31 +1,13 @@
-#' @title Function to run generalized linear mixed-effects model (glmer) across
-#'   multiple grouping variables.
+#' @title Function to run generalized linear mixed-effects model (`glmer`)
+#'   across multiple grouping variables.
 #' @name grouped_glmer
-#' @author Indrajeet Patil
 #' @return A tibble dataframe with tidy results from linear model or model
 #'   summaries.
 #'
 #' @inheritParams grouped_lm
 #' @inheritDotParams lme4::glmer
 #'
-#' @importFrom lme4 glmer
-#' @importFrom broomExtra tidy glance augment
-#'
-#' @seealso grouped_lmer
-#'
-#' @examples
-#'
-#' # for reproducibility
-#' set.seed(123)
-#'
-#' # categorical outcome; binomial family
-#' groupedstats::grouped_glmer(
-#'   formula = Survived ~ Age + (Age | Class),
-#'   family = stats::binomial(link = "probit"),
-#'   data = dplyr::sample_frac(groupedstats::Titanic_full, size = 0.3),
-#'   grouping.vars = Sex,
-#'   tidy.args = list(effects = "fixed", conf.int = TRUE, conf.level = 0.95)
-#' )
+#' @importFrom broomExtra grouped_tidy grouped_glance grouped_augment
 #' @export
 
 # function body
