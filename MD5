@@ -1,7 +1,7 @@
-4d0176baf09f9557ce9d477d1d2a27c4 *DESCRIPTION
+e605a490615e375bb61fb25a3cbfc27d *DESCRIPTION
 3c34afdc3adf82d2448f12715a255122 *LICENSE
-ee31be948daa1abcdecedf41c1a6e81e *NAMESPACE
-942376d7ab2cc4c20704738ed775f985 *NEWS.md
+b92fb9acc9adea08a63d68c3942b0bbd *NAMESPACE
+fdacefa55a36c244d87532d1a2e44258 *NEWS.md
 e6d62b1882771a1a1aa3cdb3ffc324c8 *R/global_vars.R
 43f6edd2108748c8ca55434abe8998ec *R/grouped_aov.R
 a2f88757e2aa145f22f9335af80230b6 *R/grouped_glm.R
@@ -11,12 +11,13 @@ bc2ced2f2f3a7e25f40d95d560d524b1 *R/grouped_lm.R
 90d1119e795332f0843afc47a14bceef *R/grouped_p_value.R
 5cb977b165092c37ddc28705b8e5fe05 *R/grouped_proptest.R
 90f4515f77ba31aecf39f243b0b57c23 *R/grouped_slr.R
-3fd8b4c46789b7cf533a7938f6b428db *R/grouped_summary.R
+b94f596e0cce6f3481bdc4a954529ce5 *R/grouped_summary.R
 2d5eee5f8769f92f6a1f8439ff475c3d *R/grouped_ttest.R
 4bcf43e73165203e1828fbbed6fb8ebf *R/grouped_wilcox.R
-e78cbcb70bf806044f0ef5f32af8ad41 *R/lm_effsize_ci.R
-e90f3c568e21e640a36b133df5be9d87 *R/reexports.R
-d668019068e5e9155fd72429f363e79e *README.md
+9e1d5e1d79dc9d0b4df7bbfc8416faa6 *R/helpers.R
+ae8af13ef9b4cd7ba2356d1694fc11d9 *R/lm_effsize_ci.R
+008ac6e526c219ef2441e954cc254eae *R/reexports.R
+97047fcfc470114bf2f8b5167e36f03d *README.md
 47a9e3c56ae422ebb498aebb38b4fec1 *inst/CITATION
 84dcc0f6ce986f5ed73e494ce43a43d5 *man/figures/README-grouped_summary3-1.png
 7a9d3b1ec0a0217c0ceb851a97360256 *man/grouped_aov.Rd
@@ -32,4 +33,4 @@ e0291a99324ca5b7b7a07bc718365633 *man/grouped_summary.Rd
 6f34bfaa7ea394d46fc1725e2ebb4dd4 *man/grouped_wilcox.Rd
 a4ce510c47a76025d089697854fe7625 *man/lm_effsize_ci.Rd
 a40dfdd52959083b3d60622d665152e7 *man/lm_effsize_standardizer.Rd
-5ec2b03966f40970606424b2db8aed9b *man/reexports.Rd
+374be5467453baf58cd7c8334ce321cb *man/reexports.Rd
