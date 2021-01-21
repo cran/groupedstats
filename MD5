@@ -1,7 +1,8 @@
-e605a490615e375bb61fb25a3cbfc27d *DESCRIPTION
+03781ab39094aadbaf98a40c7ae9831d *DESCRIPTION
 3c34afdc3adf82d2448f12715a255122 *LICENSE
 b92fb9acc9adea08a63d68c3942b0bbd *NAMESPACE
-fdacefa55a36c244d87532d1a2e44258 *NEWS.md
+7663b53375f641fcd7f4a59016a80b81 *NEWS.md
+f52c7fcbfb4d61315609e7fe9f605f06 *R/attach.R
 e6d62b1882771a1a1aa3cdb3ffc324c8 *R/global_vars.R
 43f6edd2108748c8ca55434abe8998ec *R/grouped_aov.R
 a2f88757e2aa145f22f9335af80230b6 *R/grouped_glm.R
@@ -17,7 +18,7 @@ b94f596e0cce6f3481bdc4a954529ce5 *R/grouped_summary.R
 9e1d5e1d79dc9d0b4df7bbfc8416faa6 *R/helpers.R
 ae8af13ef9b4cd7ba2356d1694fc11d9 *R/lm_effsize_ci.R
 008ac6e526c219ef2441e954cc254eae *R/reexports.R
-97047fcfc470114bf2f8b5167e36f03d *README.md
+67902971620dcaa424513531d91ca90b *README.md
 47a9e3c56ae422ebb498aebb38b4fec1 *inst/CITATION
 84dcc0f6ce986f5ed73e494ce43a43d5 *man/figures/README-grouped_summary3-1.png
 7a9d3b1ec0a0217c0ceb851a97360256 *man/grouped_aov.Rd
