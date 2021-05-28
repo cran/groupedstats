@@ -1,3 +1,9 @@
+# groupedstats 2.1.0
+
+  - Gets rid of a `NOTE` in CRAN's daily checks.
+  
+  - `groupedstats` now depends on `R 4.1.0`.
+
 # groupedstats 2.0.1
 
   - Resubmitting package to address script breakage complaints from the users.
